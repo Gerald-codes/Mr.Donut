@@ -10,7 +10,7 @@ $email = $_POST['email'];
 $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
 $pwdquestion = $_POST['pwdquestion'];
 $pwdanswer = $_POST['pwdanswer'];
-$qry = "SELECT * FROM Shopper WHERE Email = ?";
+$qry = "SELECT * FROM Shopper WHERE Email LIKE ?";
 $stmt = $conn->prepare($qry);
 $stmt->bind_param("s",$email);
 $stmt->execute();
@@ -33,7 +33,7 @@ if($result->num_rows=0){
         $_SESSION["ShopperName"] = $name;
 }
 else{
-    $Message = "<h3 style='color:red'>Error in inserting record</h3>";
+    $Message = "<h3 style='color:red'>Error: Email has already been registered</h3>";
 }
 $stmt->close();
 }

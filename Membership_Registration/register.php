@@ -61,7 +61,7 @@ function validateForm()
             maxdate = yyyy + '-' + mm + '-' + dd;
             document.getElementById("birthdate").setAttribute("max", maxdate);
         </script>
-        
+        <!--The above script is to set a maximum date for the input (13 years before the current date)-->
     </div>
     <p>Minimum age to create an account is 13</p>
     <div class="form-group row">
