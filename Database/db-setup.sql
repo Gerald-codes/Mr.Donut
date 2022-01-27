@@ -2,8 +2,11 @@
 --  Database Script for setting up the MySQL database   
 --  required for ECAD Assignment.             
 --  Creation Date: 29 Dec 2021. 
+--  ECAD Assignment 1 2021 Oct 
 
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+CREATE DATABASE IF NOT EXISTS mrDonut;
 
 -- Delete tables before creating   
 DROP TABLE IF EXISTS GST;

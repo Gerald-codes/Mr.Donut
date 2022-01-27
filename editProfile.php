@@ -1,6 +1,6 @@
 <?php
 session_start();
-include("header.php");
+include("indexHeader.php");
 
 if (! isset($_SESSION["ShopperID"])) { // Check if user logged in 
 	// redirect to login page if the session variable shopperid is not set

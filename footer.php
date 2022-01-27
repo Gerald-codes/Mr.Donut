@@ -2,7 +2,7 @@
             </div> <!-- close the 3rd Row -->
             <!-- 4th Row -->
             <div class="row" >
-                <div class="col-sm-12" style="text-align: right; ">
+                <div class="col-sm-12" style="text-align: center; ">
                     <hr/>
                     Do you need help? Please email to:
                     <a href="mailto:mr.donut@business.sg">Donut@business.sg</a>
