@@ -3,7 +3,7 @@
 session_start(); 
 // Include the Page Layout header
 include("../header.php"); 
-include_once("../mysql_conn.php");
+include_once("../Database/mysql_conn.php");
 ?>
 <script type="text/javascript">
 function validateForm()

@@ -2,17 +2,17 @@
 // Include the code that contains shopping cart's functions.
 // Current session is detected in "cartFunctions.php, hence need not start session here.
 include_once("cartFunctions.php");
-include("header.php"); // Include the Page Layout header
+include("../header.php"); // Include the Page Layout header
 
 if (! isset($_SESSION["ShopperID"])) { // Check if user logged in 
 	// redirect to login page if the session variable shopperid is not set
-	header ("Location: login.php");
+	header ("Location: ../login.php");
 	exit;
 }
 
 echo "<div id='myShopCart' style='margin:auto'>"; // Start a container
 if (isset($_SESSION["Cart"])) {
-	include_once("mysql_conn.php");
+	include_once("../Database/mysql_conn.php");
 	// To Do 1 (Practical 4): 
 	// Retrieve from database and display shopping cart in a table
 	$qry = "SELECT *, (Price*Quantity) AS Total
@@ -73,7 +73,7 @@ if (isset($_SESSION["Cart"])) {
 			echo "<form action='cartFunctions.php' method='post'>";
 			echo "<input type='hidden' name='action' value='remove' />";
 			echo "<input type='hidden' name='product_id' value='$row[ProductID]' />";
-			echo "<input type='image' src='images/trash-can.png' title='Remove item'/>";
+			echo "<input type='image' src='../Images/trash-can.png' title='Remove item'/>";
 			echo "</form>";
 			echo "</td>";
 			echo "</tr>";
@@ -97,7 +97,7 @@ if (isset($_SESSION["Cart"])) {
 		$_SESSION["SubTotal"] = round($subTotal, 2);	
 		// To Do 7 (Practical 5):
 		// Add PayPal Checkout button on the shopping cart page
-		echo "<form method='post' action='checkoutProcess.php'>";
+		echo "<form method='post' action='../Checkout/checkoutProcess.php'>";
 		echo "<input type='image' style='float:right';
 					 src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif'>";		
 	}
@@ -110,5 +110,5 @@ else {
 	echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";
 }
 echo "</div>"; // End of container
-include("footer.php"); // Include the Page Layout footer
+include("../footer.php"); // Include the Page Layout footer
 ?>

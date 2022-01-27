@@ -5,12 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Mr. Donut</title>
         <!-- jQuery Library -->
-        <link rel="stylesheet" href="../css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
         <!-- Latest compiled JavaScript -->
-        <script src="../js/jsquery-3.3.1.min.js"></script>
+        <script src="js/jsquery-3.3.1.min.js"></script>
         <!-- Site specific Cascading Stylesheet -->
-        <link rel="stylesheet" href="../css/site.css">
-        <script type= "text/javascript" defer="defer" src="../js/script.js"></script>
+        <link rel="stylesheet" href="css/site.css">
+        <script type= "text/javascript" defer="defer" src="js/script.js"></script>
     </head>
 
     <body>
@@ -18,15 +18,15 @@
             <!-- 1st Row -->
             <div class="row">
                 <div class="col-sm-12">
-                    <a href="../index.php">
-                        <img src="../Images/mrdonut.jpg" alt="Logo"
+                    <a href="index.php">
+                        <img src="Images/mrdonut.jpg" alt="Logo"
                         class="img-fluid" style="width:100%"/></a>
                 </div>
             </div>
             <!-- 2nd Row -->
             <div class="row">
                 <div class="col-sm-12">
-                    <?php include ("navbar.php") ; ?>
+                    <?php include ("indexNavbar.php") ; ?>
                 </div>
             </div>
             <!-- 3rd Row -->

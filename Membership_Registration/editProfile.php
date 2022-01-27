@@ -1,7 +1,12 @@
 <?php
 session_start();
+<<<<<<< HEAD:Membership_Registration/editProfile.php
 include("header.php");
 include_once("../mysql_conn.php");
+=======
+include("indexHeader.php");
+
+>>>>>>> e71af5bbf9d148d7d879f0468ab2c9c645596100:editProfile.php
 if (! isset($_SESSION["ShopperID"])) { // Check if user logged in 
 	// redirect to login page if the session variable shopperid is not set
 	header ("Location: login.php");

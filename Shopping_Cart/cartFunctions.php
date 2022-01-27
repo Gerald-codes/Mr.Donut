@@ -18,17 +18,17 @@ function addItem() {
 	// Check if user logged in 
 	if (! isset($_SESSION["ShopperID"])) {
 		// redirect to login page if the session variable shopperid is not set
-		header ("Location: login.php");
+		header ("Location: ../login.php");
 		exit;
 	}
 	// TO DO 1
 	// Write code to implement: if a user clicks on "Add to Cart" button, insert/update the 
 	// database and also the session variable for counting number of items in shopping cart.
-	include_once("mysql_conn.php"); // Establish database connection handle: $conn
+	include_once("../Database/mysql_conn.php"); // Establish database connection handle: $conn
 	// Check if a shopping cart exist, if not create a new shopping cart
 	if (! isset($_SESSION["Cart"])) {
 		// Create a shopping cart for the user
-		$qry = "INSERT INTO Shopcart(ShopperID) VALUES(?)";
+		$qry = "INSERT INTO ShopCart(ShopperID) VALUES(?)";
 		$stmt = $conn->prepare($qry);
 		$stmt->bind_param("i", $_SESSION["ShopperID"]); // "i" - integer
 		$stmt->execute();
@@ -84,7 +84,7 @@ function updateItem() {
 	// Check if shopping cart exists 
 	if (! isset($_SESSION["Cart"])) {
 		// redirect to login page if the session variable cart is not set
-		header ("Location: login.php");
+		header ("Location: ../login.php");
 		exit;
 	}
 	// TO DO 2
@@ -93,7 +93,7 @@ function updateItem() {
 	$cartid = $_SESSION["Cart"];
 	$pid = $_POST["product_id"];
 	$quantity = $_POST["quantity"];
-	include_once("mysql_conn.php"); // Establish database connection handle: $conn
+	include_once("../Database/mysql_conn.php"); // Establish database connection handle: $conn
 	$qry = "UPDATE ShopCartItem SET Quantity=? WHERE ProductID=? AND ShopCartID=?";
 	$stmt = $conn->prepare($qry);
 	$stmt->bind_param("iii", $quantity, $pid, $cartid); // "i" - integer
@@ -107,13 +107,13 @@ function updateItem() {
 function removeItem() {
 	if (! isset($_SESSION["Cart"])) {
 		// redirect to login page if the session variable cart is not set
-		header ("Location: login.php");
+		header ("Location: ../login.php");
 		exit;
 	}
 	// TO DO 3
 	// Write code to implement: if a user clicks on "Remove" button, update the database
 	// and also the session variable for counting number of items in shopping cart.
-	include_once("mysql_conn.php"); // Establish database connection handle: $conn
+	include_once("../Database/mysql_conn.php"); // Establish database connection handle: $conn
 	$qry = "DELETE FROM ShopCartItem 
 			WHERE ShopCartID=? AND ProductID=?";
 	$stmt = $conn->prepare($qry);
