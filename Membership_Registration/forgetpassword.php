@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
 	$row = $result->fetch_array();
 	$qn = $row["PwdQuestion"];
 	echo "<form method='post'>";
-	echo '<div class="form-group row"><label>Security Question:</label></div>';
+	echo '<div class="form-group row"><label>Security Question:$qn</label></div>';
 	echo '<div class="form-group row"><label class="col-sm-3 col-form-label" for="answer">Security Answer: $qn</label><div class="col-sm-9">';
 	echo '<input class="form-control" name="answer" id="answer" type="text" required /></div></div>';
 	// Process after user click the submit button

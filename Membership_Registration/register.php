@@ -47,7 +47,7 @@ function validateForm()
     </div>
     <div class="form-group row">
     <label class="col-sm-2 col-form-label" for="birthdate">Date of Birth:</label>
-        <div class="col-sm-3">
+    <div class="col-sm-3">
             <input class="form-control" name="birthdate" id="birthdate" 
                    type="date" max="2000-01-01" required /> (required)
         </div>
