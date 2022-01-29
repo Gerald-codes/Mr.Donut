@@ -5,9 +5,6 @@ include("../header.php"); // Include the Page Layout header
 <div style="width:80%; margin:auto;">
 <form method="post">
 	<div class="form-group row">
-		
-	</div>
-	<div class="form-group row">
 		<label class="col-sm-3 col-form-label" for="eMail">
          Email:</label>
 		<div class="col-sm-9">
@@ -24,7 +21,7 @@ include("../header.php"); // Include the Page Layout header
 <?php 
 $qry = "SELECT * FROM Shopper WHERE Email LIKE ?";
 $stmt = $conn->prepare($qry);
-$stmt->bind_param("s", $_SESSION[]); 	// "s" - string 
+$stmt->bind_param("s", $_POST['eMail']);
 $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();

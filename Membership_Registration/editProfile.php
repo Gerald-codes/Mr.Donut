@@ -1,12 +1,7 @@
 <?php
 session_start();
-<<<<<<< HEAD:Membership_Registration/editProfile.php
-include("header.php");
-include_once("../mysql_conn.php");
-=======
 include("indexHeader.php");
 
->>>>>>> e71af5bbf9d148d7d879f0468ab2c9c645596100:editProfile.php
 if (! isset($_SESSION["ShopperID"])) { // Check if user logged in 
 	// redirect to login page if the session variable shopperid is not set
 	header ("Location: login.php");
@@ -19,7 +14,11 @@ $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
 if ($result->num_rows > 0) {
-
+    $row = $result->fetch_array();
+    $email = $row['EmailAddress'];
+    $pass = $row['Password'];
+    $cou = $row["Country"];
+    $addr = $row["Address"];
 }
 else{
     header ("Location: login.php");
@@ -38,7 +37,7 @@ else{
                 Current Email Address:
             </label>
             <div class="col-sm-9">
-                <?php echo '<b></b>'; ?>
+                <?php echo '<b>$email</b>'; ?>
             </div>
         </div>
         <div class="form-group row">
@@ -117,7 +116,7 @@ else{
                 Current Country:
             </label>
             <div class="col-sm-9">
-                <?php echo '<b></b>'; ?>
+                <?php echo '<b>$cou</b>'; ?>
             </div>
         </div>
         <div class="form-group row">
@@ -131,10 +130,10 @@ else{
         </div>
         <div class="form-group row">
         <label class="col-sm-3 col-form-label" for="country">
-                Current Country:
+                Current Address:
             </label>
             <div class="col-sm-9">
-                <?php echo '<b></b>'; ?>
+                <?php echo '<b>$addr</b>'; ?>
             </div>
         </div>
         <div class="form-group row">
@@ -194,6 +193,7 @@ if (isset($_POST["pwd1"])) {
             $stmt->bind_param("s",$password);
             $stmt->execute();
             $stmt->close();
+            echo "<script>alert('Password has been updated')</script>";
         }
         else{
             echo "<script>alert('Old Password does not match')</script>";
