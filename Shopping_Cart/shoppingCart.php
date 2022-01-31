@@ -83,8 +83,14 @@ if (isset($_SESSION["Cart"])) {
 		echo "</table>"; // End of table
 		echo "</div>"; // End of Bootstrap responsive table
 
+		$totalQuantity = 0;
+		foreach ($_SESSION["Items"] as $purchased) {
+			$totalQuantity += $purchased['quantity'];
+		}
+
 		echo "<p style='text-align:right; font-size:20px'>
-			  Subtotal = S$". number_format($subTotal, 2);
+			  Subtotal = S$". number_format($subTotal, 2), 
+			  "</br>Total quantity of items: $totalQuantity"; // Additional 2. Compute number of items in cart
 		$_SESSION["SubTotal"] = round($subTotal, 2);	
 
 		echo "<form method='post' action='../Checkout/checkoutProcess.php'>";
@@ -99,6 +105,7 @@ if (isset($_SESSION["Cart"])) {
 else {
 	echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";
 }
+
 echo "</div>"; // End of container
 include("../footer.php"); // Include the Page Layout footer
 ?>
