@@ -5,8 +5,8 @@
                 <div class="col-sm-12" style="text-align: center; ">
                     <hr/>
                     Do you need help? Please email to:
-                    <a href="mailto:mr.donut@business.sg">Donut@business.sg</a>
-                    <p style="font-size: 12px" >&copy;Copyright by Donut Group</p>
+                    <a href="mailto:enquiries@mrdonut.sg">Donut@business.sg</a>
+                    <p style="font-size: 12px" >&copy;Copyright by Mr Donut Pte Ltd</p>
                 </div>
             </div>
         </div>

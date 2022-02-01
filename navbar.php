@@ -26,7 +26,7 @@ if(isset($_SESSION["ShopperName"])) {
 <link rel="stylesheet" href="css/site.css">
 <!-- To Do 3 (Practical 1) - 
      Display a navbar which is visible before or after collapsing -->
-<nav class="navbar navbar-expand-md navbar-dark bg-custom" >
+<nav class="navbar navbar-expand-md navbar-dark bg-custom" style="color: pink;">
     <!-- Dynamic Text Display -->
     <span class="navbar-text ml-md-2"
         style="color: #F7BE81; max-width: 80%;">
@@ -40,7 +40,7 @@ if(isset($_SESSION["ShopperName"])) {
 </nav>
 <!-- To Do 4 (Practical 1) - 
      Define a collapsible navbar -->
-<nav class="navbar navbar-expand-md navbar-dark bg-custom">
+<nav class="navbar navbar-expand-md navbar-dark bg-custom2">
     <!-- Collapsible part of navbar -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <!-- Left-justified menu items -->
