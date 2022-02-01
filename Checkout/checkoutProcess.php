@@ -1,8 +1,8 @@
 <?php
 session_start();
-include("header.php"); // Include the Page Layout header
+include("../header.php"); // Include the Page Layout header
 include_once("myPayPal.php"); // Include the file that contains PayPal settings
-include_once("mysql_conn.php"); 
+include_once("../Database/mysql_conn.php"); 
 
 if($_POST) //Post Data received from Shopping cart page.
 {
@@ -135,7 +135,7 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 		// To Do 5 (DIY): Update stock inventory in product table 
 		//                after successful checkout
 		foreach ($_SESSION['Items'] as $item) {
-			$qry = 'SELECT Quantity FROM PRODUCT WHERE ProductID=?'
+			$qry = 'SELECT Quantity FROM PRODUCT WHERE ProductID=?';
 			$stmt->bind_param("i", $item['productID']);
 			$stmt->execute();
 			$result = $stmt->get_result();
@@ -243,5 +243,5 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 	}
 }
 
-include("footer.php"); // Include the Page Layout footer
+include("../footer.php"); // Include the Page Layout footer
 ?>
