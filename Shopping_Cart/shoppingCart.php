@@ -1,6 +1,6 @@
 <?php 
 // Include the code that contains shopping cart's functions.
-// Current session is detected in "cartFunctions.php, hence need not start session here.
+// Current session is detected in cartFunctions.php, hence need not start session here.
 include_once("cartFunctions.php");
 include("../header.php"); // Include the Page Layout header
 
@@ -13,8 +13,6 @@ if (! isset($_SESSION["ShopperID"])) { // Check if user logged in
 echo "<div id='myShopCart' style='margin:auto'>"; // Start a container
 if (isset($_SESSION["Cart"])) {
 	include_once("../Database/mysql_conn.php");
-	// To Do 1 (Practical 4): 
-	// Retrieve from database and display shopping cart in a table
 	$qry = "SELECT *, (Price*Quantity) AS Total
 			FROM ShopCartItem WHERE ShopCartID=?";
 	$stmt = $conn->prepare($qry);
@@ -24,8 +22,6 @@ if (isset($_SESSION["Cart"])) {
 	$stmt->close();
 	
 	if ($result->num_rows > 0) {
-		// To Do 2 (Practical 4): Format and display 
-		// the page header and header row of shopping cart page
 		echo "<p class='page-title' style='text-align:center'>Shopping Cart</p>"; 
 		echo "<div class='table-responsive' >"; // Bootstrap responsive table
 		echo "<table class='table table-hover'>"; // Start of table
@@ -38,11 +34,9 @@ if (isset($_SESSION["Cart"])) {
 		echo "<th>&nbsp;</th>";
 		echo "</tr>"; // End of table row
 		echo "</thead>"; // End of table's header section
-		// To Do 5 (Practical 5):
-		// Declare an array to store the shopping cart items in session variable 
+
 		$_SESSION["Items"] = array();	
-		// To Do 3 (Practical 4): 
-		// Display the shopping cart content
+
 		$subTotal = 0; // Declare a variable to compute subtotal before tax
 		echo "<tbody>"; // Start of table's body section
 		while ($row = $result->fetch_array()) {
@@ -77,8 +71,7 @@ if (isset($_SESSION["Cart"])) {
 			echo "</form>";
 			echo "</td>";
 			echo "</tr>";
-			// To Do 6 (Practical 5):
-		    // Store the shopping cart items in session variable as an associate array
+
 			$_SESSION["Items"][] = array("productID"=>$row["ProductID"],
 										 "name"=>$row["Name"],
 										 "price"=>$row["Price"],
@@ -89,14 +82,17 @@ if (isset($_SESSION["Cart"])) {
 		echo "</tbody>"; // End of table's body section
 		echo "</table>"; // End of table
 		echo "</div>"; // End of Bootstrap responsive table
-				
-		// To Do 4 (Practical 4): 
-		// Display the subtotal at the end of the shopping cart
+
+		$totalQuantity = 0;
+		foreach ($_SESSION["Items"] as $purchased) {
+			$totalQuantity += $purchased['quantity'];
+		}
+
 		echo "<p style='text-align:right; font-size:20px'>
-			  Subtotal = S$". number_format($subTotal, 2);
+			  Subtotal = S$". number_format($subTotal, 2), 
+			  "</br>Total quantity of items: $totalQuantity"; // Additional 2. Compute number of items in cart
 		$_SESSION["SubTotal"] = round($subTotal, 2);	
-		// To Do 7 (Practical 5):
-		// Add PayPal Checkout button on the shopping cart page
+
 		echo "<form method='post' action='../Checkout/checkoutProcess.php'>";
 		echo "<input type='image' style='float:right';
 					 src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif'>";		
@@ -109,6 +105,7 @@ if (isset($_SESSION["Cart"])) {
 else {
 	echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";
 }
+
 echo "</div>"; // End of container
 include("../footer.php"); // Include the Page Layout footer
 ?>
