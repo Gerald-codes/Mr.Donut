@@ -1,6 +1,7 @@
 <?php 
 session_start(); // Detect the current session
 include("../header.php"); // Include the Page Layout header
+include_once("../Database/mysql_conn.php");
 ?>
 <div style="width:80%; margin:auto;">
 <form method="post">
@@ -37,7 +38,7 @@ if ($result->num_rows > 0) {
 		// Read email address entered by user
 		$answer = $_POST["answer"];
 		// Retrieve shopper record based on e-mail address
-		include_once("mysql_conn.php");
+		include_once("../mysql_conn.php");
 		$qry = "SELECT * FROM Shopper WHERE PwdAnswer LIKE ?";
 		$stmt = $conn->prepare($qry);
 		$stmt->bind_param("s", $answer); 	// "s" - string 

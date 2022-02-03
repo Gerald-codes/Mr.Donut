@@ -1,10 +1,11 @@
 <?php
 session_start();
-include("indexHeader.php");
+include("../header.php");
+include_once("../Database/mysql_conn.php");
 
 if (! isset($_SESSION["ShopperID"])) { // Check if user logged in 
 	// redirect to login page if the session variable shopperid is not set
-	header ("Location: login.php");
+	header ("Location: ../login.php");
 	exit;
 }
 $qry = "SELECT * FROM Shopper WHERE ShopperID = ?";
@@ -21,7 +22,7 @@ if ($result->num_rows > 0) {
     $addr = $row["Address"];
 }
 else{
-    header ("Location: login.php");
+    header ("Location: ../login.php");
 	exit;
 }
 ?>
@@ -223,5 +224,5 @@ if(isset($_POST["address"])){
 
 $conn->close();
 // Include the Page Layout footer
-include("footer.php"); 
+include("../footer.php"); 
 ?>

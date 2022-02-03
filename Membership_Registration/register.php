@@ -115,7 +115,7 @@ function validateForm()
             Security Question:</label>
         <div class="col-sm-5">
             <input class="form-control" name="pwdquestion" id="pwdquestion" 
-                   type="text"/>
+                   type="text" required /> (required)
         </div>
     </div>
     <div class="form-group row">
@@ -123,7 +123,7 @@ function validateForm()
             Answer to Security Question:</label>
         <div class="col-sm-5">
             <input class="form-control" name="pwdanswer" id="pwdanswer" 
-                   type="text"/> (required)
+                   type="text" required /> (required)
         </div>
     </div>
     <div class="form-group row">       

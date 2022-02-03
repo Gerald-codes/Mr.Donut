@@ -6511,10 +6511,10 @@ a.close.disabled {
   background-color: #007bff !important;
 }
 .bg-custom{
-  background-color: #193498;
+  background-color: #193498 !important;
 }
 .bg-custom2{
-  background-color: #113CFC;
+  background-color: #113CFC !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus,

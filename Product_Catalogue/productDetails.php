@@ -69,8 +69,8 @@ echo "Quantity: <input type='number' name='quantity' value='1'
                  min='1' max='10' style='width:40px' required />";
 echo "<button class='btn btn-primary btn-sm' style='margin-left:3px' type='submit'> Add to Cart </button>";
 echo "</form>";
-$link = "ranking.php?pid=$row[ProductID]";
-echo "<button class='btn btn-primary btn-sm' style='margin-left:3px' > Rate me! </button>";
+$link = "../Membership_Registration/ranking.php?pid=$pid";
+echo "<a href=$link><button class='btn btn-primary btn-sm' style='margin-left:3px' >Rate me!</button></a>";
 echo "</div>";
 echo "</div>";
 
