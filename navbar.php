@@ -13,7 +13,7 @@ if(isset($_SESSION["ShopperName"])) {
     //after shopper has logged in.
 	$content1 = "Welcome <b>$_SESSION[ShopperName]</b>";
     $content2 = "<li class='nav-item'>
-                <a class='nav-link' href='../changePassword.php'>Change Password</a></li>
+                <a class='nav-link' href='Membership_Registration/editProfile.php'>Edit Profile</a></li>
                 <li class='nav-item'>
                 <a class='nav-link' href='../logout.php'>Logout</a></li>";
 	//To Do 2 (Practical 4) - 
@@ -26,7 +26,7 @@ if(isset($_SESSION["ShopperName"])) {
 <link rel="stylesheet" href="css/site.css">
 <!-- To Do 3 (Practical 1) - 
      Display a navbar which is visible before or after collapsing -->
-<nav class="navbar navbar-expand-md navbar-dark bg-custom" >
+<nav class="navbar navbar-expand-md navbar-dark bg-custom">
     <!-- Dynamic Text Display -->
     <span class="navbar-text ml-md-2"
         style="color: #F7BE81; max-width: 80%;">
@@ -40,7 +40,7 @@ if(isset($_SESSION["ShopperName"])) {
 </nav>
 <!-- To Do 4 (Practical 1) - 
      Define a collapsible navbar -->
-<nav class="navbar navbar-expand-md navbar-dark bg-custom">
+<nav class="navbar navbar-expand-md navbar-dark bg-custom2">
     <!-- Collapsible part of navbar -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <!-- Left-justified menu items -->

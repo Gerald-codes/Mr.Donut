@@ -138,12 +138,14 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 	{
 		// Update stock inventory in product table 
 		//                after successful checkout
+
 		$qry = "SELECT * FROM ShopCartItem WHERE ShopCartID = ?";
 		$stmt = $conn->prepare($qry);
 		$stmt->bind_param("i", $_SESSION["Cart"]);
 		$stmt->execute();
 		$result = $stmt->get_result();
 		$stmt->close();
+    
 		while($row = $result->fetch_array()){
 			$qry = "UPDATE Product SET Quantity = Quantity - ? 
 					WHERE ProductID = ?";

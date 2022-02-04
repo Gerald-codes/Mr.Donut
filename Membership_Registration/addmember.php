@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once("../mysql_conn.php");
+include_once("../Database/mysql_conn.php");
 $name = $_POST['name'];
 $birthdate = $_POST['birthdate'];
 $address = $_POST['address'];
@@ -17,7 +17,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
 $addNewItem=0;
-if($result->num_rows=0){
+if(!$result->num_rows>0){
         $qry = "INSERT INTO Shopper (Name, Birthdate, Address, Country, Phone, Email, Password,PwdQuestion,PwdAnswer)
         VALUES(?,?,?,?,?,?,?,?,?)";
         $stmt = $conn->prepare($qry);

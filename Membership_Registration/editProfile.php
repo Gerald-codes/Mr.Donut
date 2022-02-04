@@ -1,10 +1,11 @@
 <?php
 session_start();
-include("indexHeader.php");
+include("../header.php");
+include_once("../Database/mysql_conn.php");
 
 if (! isset($_SESSION["ShopperID"])) { // Check if user logged in 
 	// redirect to login page if the session variable shopperid is not set
-	header ("Location: login.php");
+	header ("Location: ../login.php");
 	exit;
 }
 $qry = "SELECT * FROM Shopper WHERE ShopperID = ?";
@@ -14,10 +15,14 @@ $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
 if ($result->num_rows > 0) {
-
+    $row = $result->fetch_array();
+    $email = $row['EmailAddress'];
+    $pass = $row['Password'];
+    $cou = $row["Country"];
+    $addr = $row["Address"];
 }
 else{
-    header ("Location: login.php");
+    header ("Location: ../login.php");
 	exit;
 }
 ?>
@@ -30,16 +35,19 @@ else{
         </div>
         <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="email">
-                Existing Email Address:
+                Current Email Address:
             </label>
+            <div class="col-sm-9">
+                <?php echo '<b>$email</b>'; ?>
+            </div>
         </div>
         <div class="form-group row">
             <label class="col-sm-3 col-form-label" for="email">
                 New Email Address:
             </label>
             <div class="col-sm-9">
-                <input class="form-control" type="email2"
-                    name="email" id="email" />
+                <input class="form-control" type="email"
+                    name="email2" id="email2" />
             </div>
         </div>
         <div class="form-group row">
@@ -48,8 +56,6 @@ else{
             </div>
         </div>
     </form>
-</div>
-<div>
     <script type="text/javascript">
     function validateForm()
     {
@@ -100,8 +106,6 @@ else{
             </div>
         </div>
     </form>
-</div>
-<div>
     <form action="" method="post">
         <div class="form-group row">
             <div class="col-sm-9 offset-sm-3">
@@ -109,12 +113,15 @@ else{
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="email">
-                Existing Country:
+            <label class="col-sm-3 col-form-label" for="country">
+                Current Country:
             </label>
+            <div class="col-sm-9">
+                <?php echo '<b>$cou</b>'; ?>
+            </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="email">
+            <label class="col-sm-3 col-form-label" for="country">
                 New Country:
             </label>
             <div class="col-sm-9">
@@ -123,17 +130,20 @@ else{
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="email">
-                Existing Address:
+        <label class="col-sm-3 col-form-label" for="country">
+                Current Address:
             </label>
+            <div class="col-sm-9">
+                <?php echo '<b>$addr</b>'; ?>
+            </div>
         </div>
         <div class="form-group row">
-            <label class="col-sm-3 col-form-label" for="email">
+            <label class="col-sm-3 col-form-label" for="address">
                 New Address:
             </label>
             <div class="col-sm-9">
                 <input class="form-control" type="text"
-                    name="country" id="country" required />
+                    name="address" id="address" required />
             </div>
         </div>
         <div class="form-group row">
@@ -147,15 +157,26 @@ else{
 if (isset($_POST['email']) && trim($_POST['email']) != "" ) {
     $email = $_POST['email'];
     //Validation for email to be added
-    $qry = "UPDATE Shopper SET EmailAddress=? WHERE ShopperID LIKE ?" ;
+    $qry = "SELECT * FROM Shopper WHERE Email LIKE ?" ;
     $stmt = $conn->prepare($qry);
-    $stmt->bind_param("si",$email,$_SESSION["ShopperID"]);
+    $stmt->bind_param("s",$email);
     $stmt->execute();
+    $result = $stmt->get_result();
     $stmt->close();
+    $value = $result->num_rows;
+    if ($result->num_rows > 0) {
+        echo "<script>alert('Email in use')</alert>";
+    }
+    else{
+        $qry = "UPDATE Shopper SET EmailAddress=? WHERE ShopperID LIKE ?" ;
+        $stmt = $conn->prepare($qry);
+        $stmt->bind_param("si",$email,$_SESSION["ShopperID"]);
+        $stmt->execute();
+        $stmt->close();
+    }
 }
 
 if (isset($_POST["pwd1"])) {
-	// To Do 2: Read new password entered by user
     password_verify($pwd,$hashed_pwd);
 	$qry = "SELECT * FROM Shopper WHERE ShopperID LIKE ?" ;
     $stmt = $conn->prepare($qry);
@@ -173,18 +194,35 @@ if (isset($_POST["pwd1"])) {
             $stmt->bind_param("s",$password);
             $stmt->execute();
             $stmt->close();
+            echo "<script>alert('Password has been updated')</script>";
         }
         else{
-
+            echo "<script>alert('Old Password does not match')</script>";
         }
     }
     else{
-
-    }
-	
+        echo "<script>alert('Fatal Error: Shopper ID invalid')</alert>";
+        exit;
+    }	
+}
+if(isset($_POST["country"])){
+    $cty = $_POST["country"];
+    $qry = "UPDATE Shopper SET Country=? WHERE ShopperID LIKE ?" ;
+    $stmt = $conn->prepare($qry);
+    $stmt->bind_param("si",$email,$_SESSION["ShopperID"]);
+    $stmt->execute();
+    $stmt->close();
+}
+if(isset($_POST["address"])){
+    $addr = $_POST["address"];
+    $qry = "UPDATE Shopper SET Address=? WHERE ShopperID LIKE ?" ;
+    $stmt = $conn->prepare($qry);
+    $stmt->bind_param("si",$addr,$_SESSION["ShopperID"]);
+    $stmt->execute();
+    $stmt->close();
 }
 
 $conn->close();
 // Include the Page Layout footer
-include("footer.php"); 
+include("../footer.php"); 
 ?>
