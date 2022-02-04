@@ -56,24 +56,62 @@ while ($row = $result->fetch_array()){
 
     // Right Column - Display the Product's Price 
     $formattedPrice = number_format($row["Price"],2);
-    echo "Price:<span style='font-weight: bold;color:red;'>
-		S$ $formattedPrice</span>";
+    $OfferedPrice = number_format($row["OfferedPrice"],2);
+    $Quantity = $row["Quantity"];
+
+    if ($Quantity == 0){
+      echo "<div class='col-8'>";
+      echo "<span style='font-weight: bold;color:red;'>
+      Out of Stock!</span>";
+      echo "</div>";
+    }
+    else{
+        if ($row["Offered"] == 1){
+            echo "<div class='col-8'>";
+            echo "<span style='font-weight: bold;color:grey;'><s>
+                S$ $formattedPrice</s></span>";
+            echo "<p><span style='font-weight: bold;color:red;'>
+                S$ $OfferedPrice</span></p>";
+            echo "</div>";
+          }
+        else{
+            echo "<div class='col-8'>";
+            echo "<span style='font-weight: bold;color:red;'>
+                S$ $formattedPrice</span>";
+            echo "</div>";
+        }
+    }
+    
 }
 // To Do 1:  Ending ....
 
 // To Do 2:  Create a Form for adding the product to shopping cart. Starting ....
-echo "<form action='../Shopping_Cart/cartFunctions.php' method='post'>";
-echo "<input type='hidden' name='action' value='add' />";
-echo "<input type='hidden' name='product_id' value='$pid' />";
-echo "Quantity: <input type='number' name='quantity' value='1'
+if ($Quantity <= 0){
+    echo "<form action='../Shopping_Cart/cartFunctions.php' method='post'>";
+    echo "<input type='hidden' name='action' value='add' />";
+    echo "<input type='hidden' name='product_id' value='$pid' />";
+    echo "Quantity: <input type='number' name='quantity' value='1'
+                 min='1' max='10' style='width:40px' disabled />";
+    echo "<button class='btn btn-primary btn-sm' style='margin-left:3px' type='submit' disabled> Add to Cart </button>";
+    echo "</form>";
+    $link = "../Membership_Registration/ranking.php?pid=$pid";
+    //echo "<a href=$link><button class='btn btn-primary btn-sm' style='margin-left:3px' >Rate me!</button></a>";
+    echo "</div>";
+    echo "</div>";
+}
+else {
+    echo "<form action='../Shopping_Cart/cartFunctions.php' method='post'>";
+    echo "<input type='hidden' name='action' value='add' />";
+    echo "<input type='hidden' name='product_id' value='$pid' />";
+    echo "Quantity: <input type='number' name='quantity' value='1'
                  min='1' max='10' style='width:40px' required />";
-echo "<button class='btn btn-primary btn-sm' style='margin-left:3px' type='submit'> Add to Cart </button>";
-echo "</form>";
-$link = "../Membership_Registration/ranking.php?pid=$pid";
-echo "<a href=$link><button class='btn btn-primary btn-sm' style='margin-left:3px' >Rate me!</button></a>";
-echo "</div>";
-echo "</div>";
-
+    echo "<button class='btn btn-primary btn-sm' style='margin-left:3px' type='submit'> Add to Cart </button>";
+    echo "</form>";
+    $link = "../Membership_Registration/ranking.php?pid=$pid";
+    #echo "<a href=$link><button class='btn btn-primary btn-sm' style='margin-left:3px' >Rate me!</button></a>";
+    echo "</div>";
+    echo "</div>";
+}
 // To Do 2:  Ending ....
 
 $conn->close(); // Close database connnection
