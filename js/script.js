@@ -1,7 +1,7 @@
-function getDeliveryMode() {
-    document.getElementById("myForm").style.display = "block";
+function openForm() {
+    document.getElementById("deliveryForm").style.display = "block";
   }
   
 function closeForm() {
-document.getElementById("myForm").style.display = "none";
+  document.getElementById("deliveryForm").style.display = "none";
 }

@@ -13,7 +13,6 @@ if (! isset($_SESSION["ShopperID"])) { // Check if user logged in
 echo "<div id='myShopCart' style='margin:auto'>"; // Start a container
 if (isset($_SESSION["Cart"])) {
 	include_once("../Database/mysql_conn.php");
-	// To Do 1 (Practical 4): 
 	// Retrieve from database and display shopping cart in a table
 	$qry = "SELECT *, (Price*Quantity) AS Total
 			FROM ShopCartItem WHERE ShopCartID=?";
@@ -24,8 +23,7 @@ if (isset($_SESSION["Cart"])) {
 	$stmt->close();
 	
 	if ($result->num_rows > 0) {
-		// To Do 2 (Practical 4): Format and display 
-		// the page header and header row of shopping cart page
+		// Format and display the page header and header row of shopping cart page
 		echo "<p class='page-title' style='text-align:center'>Shopping Cart</p>"; 
 		echo "<div class='table-responsive' >"; // Bootstrap responsive table
 		echo "<table class='table table-hover'>"; // Start of table
@@ -39,10 +37,10 @@ if (isset($_SESSION["Cart"])) {
 		echo "</tr>";
 		echo "</thread>";
 
-		// To Do 5 (Practical 5):
+
 		// Declare an array to store the shopping cart items in session variable 
 		$_SESSION["Items"] = array();
-		// To Do 3 (Practical 4): 
+
 		// Display the shopping cart content
 		$subTotal = 0; // Declare a variable to compute subtotal before tax
 		echo "<tbody>"; // Start of table's body section
@@ -77,7 +75,7 @@ if (isset($_SESSION["Cart"])) {
 			echo "</form>";
 			echo "</td>";
 			echo "</tr>";
-			// To Do 6 (Practical 5):
+
 		    // Store the shopping cart items in session variable as an associate array
 			$_SESSION["Items"][]= array("productId"=>$row["ProductID"],
 										"name"=>$row["Name"],
@@ -90,30 +88,38 @@ if (isset($_SESSION["Cart"])) {
 		echo "</table>"; // End of table
 		echo "</div>"; // End of Bootstrap responsive table
 				
-		// To Do 4 (Practical 4): 
 		// Display the subtotal at the end of the shopping cart
 		echo "<h4><p style='text-align:right; font-size:20px'>
 				Subtotal = S$ ".number_format($subTotal, 2);	
 		$_SESSION["SubTotal"] = round($subTotal, 2);
+		echo ("</p><h4>");
 
-		// To Do 7 (Practical 5):
 		// Add PayPal Checkout button on the shopping cart page
-		echo('<div class="form-popup" id="getDeliveryMode">');
-		echo('<form action="/action_page.php" class="form-container">');
-		echo('<h1>Login</h1>');
-		echo('<label for="email"><b>Email</b></label>');
-		echo('<input type="text" placeholder="Enter Email" name="email" required>');
-		echo('<label for="psw"><b>Password</b></label>');
-		echo('<input type="password" placeholder="Enter Password" name="psw" required>');
-		echo('<button type="submit" class="btn">Login</button>');
-		echo('<button type="button" class="btn cancel" onclick="closeForm()">Close</button>');
-		echo('</form>');
+		echo("<button class='open-button' onclick='openForm()'>checkout</button>");
+		echo('<div class="form-popup" id="deliveryForm">');
+		echo('<form method="post" action="../Checkout/checkoutProcess.php" class="form-container">');
+		echo('<h2 id="form-header">Delivery Option</h2>');
+		echo("<div class='options'>");
+		echo('<input type="radio" id="Normal" name="ShipCharge" value="2">');
+		echo('<label for="normal"><h5>Normal Delivery</h5><p>$2</p></label>');
+		echo("</div>");
+		echo("<p> delivered within 1 working day after an order is placed</p>");
+		echo("<div class='options'>");
+		echo('<input type="radio" id="express" name="ShipCharge" value="5">');
+		echo('<label for="express"><h5>Express Delivery</h5></label>');
+		echo("</div>");
+		echo("<p> delivered within 2 hours after an order is placed</p>");
+		echo("<div class='buttonContainer'>");
+		echo "<input id='formButton' type='image' style='float:right;' onclick='getDeliveryMode()'
+					src='https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-large.png' 
+					alt='Buy now with PayPal'>";
+		echo('<button type="button" class="closebtn" onclick="closeForm()">Close</button>');
 		echo('</div>');
-		echo("<button class='open-button' onclick='getDeliveryMode()'>Open Form</button>");
-		// echo "<form method='post' action='../Checkout/checkoutProcess.php'>";
-		// echo "<input type='image' style='float:right;' onclick='getDeliveryMode()'
-		// 			src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif'>";
-		// echo "</form></p><h4>";
+		echo('</div>');
+		echo('</form>');
+		
+		
+		
 	}
 	else {
 		echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";

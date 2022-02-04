@@ -6,8 +6,10 @@ include_once("../Database/mysql_conn.php");
 
 if($_POST) //Post Data received from Shopping cart page.
 {
-	// To Do 6 (DIY): Check to ensure each product item saved in the associative
-	//                array is not out of stock
+	if (isset($_POST['ShipCharge'])) {
+		$_SESSION["ShipCharge"] =  $_POST['ShipCharge'];
+	}
+	//  Check to ensure each product item saved in the associative array is not out of stock
 	$outOfStock = FALSE;
 	foreach($_SESSION['Items'] as $item) {
 		$qry = "SELECT Quantity FROM Product WHERE ProductID=?";
@@ -26,7 +28,7 @@ if($_POST) //Post Data received from Shopping cart page.
 	
 	if ($outOfStock) {
 		echo "Return to shopping cart to amend purchases. <br />";
-		include("footer.php");
+		include("../footer.php");
 		exit;
 	}
 }
@@ -41,7 +43,7 @@ if($_POST) //Post Data received from Shopping cart page.
 		$paypal_data .= '&L_PAYMENTREQUEST_0_NUMBER'.$key.'='.urlencode($item["productId"]);
 	}
 	
-	// Compute GST amount 7% for Singapore, round the figure to 2 decimal places
+	// Compute GST amount from GST Table in DB, round the figure to 2 decimal places
 	$qry = "SELECT TaxRate FROM GST WHERE EffectiveDate < now() order by EffectiveDate DESC LIMIT 1";
 	$stmt = $conn->prepare($qry);
 	$stmt->execute();
@@ -49,10 +51,7 @@ if($_POST) //Post Data received from Shopping cart page.
 	$stmt->close();	
 	$row = $result->fetch_array();
 	$_SESSION["Tax"] = round($_SESSION["SubTotal"]*($row["TaxRate"]/100),2);
-	
-	// To Do 1B: Compute Shipping charge - S$2.00 per trip
-	$_SESSION["ShipCharge"] = 2.00;	
-	
+
 	//Data to be sent to PayPal
 	$padata = '&CURRENCYCODE='.urlencode($PayPalCurrencyCode).
 			  '&PAYMENTACTION=Sale'.
@@ -64,7 +63,7 @@ if($_POST) //Post Data received from Shopping cart page.
 			  '&PAYMENTREQUEST_0_ITEMAMT='.urlencode($_SESSION["SubTotal"]). 
 			  '&PAYMENTREQUEST_0_SHIPPINGAMT='.urlencode($_SESSION["ShipCharge"]). 
 			  '&PAYMENTREQUEST_0_TAXAMT='.urlencode($_SESSION["Tax"]). 	
-			  '&BRANDNAME='.urlencode("Mamaya e-BookStore").
+			  '&BRANDNAME='.urlencode("Mr. Donut").
 			  $paypal_data.				
 			  '&RETURNURL='.urlencode($PayPalReturnURL ).
 			  '&CANCELURL='.urlencode($PayPalCancelURL);	
@@ -137,40 +136,35 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 	if("SUCCESS" == strtoupper($httpParsedResponseAr["ACK"]) || 
 	   "SUCCESSWITHWARNING" == strtoupper($httpParsedResponseAr["ACK"])) 
 	{
-		// To Do 5 (DIY): Update stock inventory in product table 
+		// Update stock inventory in product table 
 		//                after successful checkout
-		foreach ($_SESSION['Items'] as $item) {
-			$qry = 'SELECT Quantity FROM PRODUCT WHERE ProductID=?';
-			$stmt->bind_param("i", $item['productID']);
-			$stmt->execute();
-			$result = $stmt->get_result();
-			$stmt->close();
-			$row = $result->fetch_array();
-			
-			// Reduce quantity
-			$qry = 'UPDATE Product SET Quantity=? WHERE ProductID=?';
+		$qry = "SELECT * FROM ShopCartItem WHERE ShopCartID = ?";
+		$stmt = $conn->prepare($qry);
+		$stmt->bind_param("i", $_SESSION["Cart"]);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$stmt->close();
+		while($row = $result->fetch_array()){
+			$qry = "UPDATE Product SET Quantity = Quantity - ? 
+					WHERE ProductID = ?";
 			$stmt = $conn->prepare($qry);
-			$qty = $row['Quantity'] - $item["quantity"];
-			$stmt->bind_param("ii", $qty, $item["productID"]);
+			$stmt->bind_param("ii",$row["Quantity"],$row["ProductID"]);
 			$stmt->execute();
 			$stmt->close();
 		}
-		// End of To Do 5
-	
-		// To Do 2: Update shopcart table, close the shopping cart (OrderPlaced=1)
+
+		// Update shopcart table, close the shopping cart (OrderPlaced=1)
 		$total = $_SESSION["SubTotal"] + $_SESSION["Tax"] + $_SESSION["ShipCharge"];
-		$qry = "UPDATE shopcart SET OrderPlaced=1, Quantity=?,
+		$qry = "UPDATE ShopCart SET OrderPlaced=1, Quantity=?,
 				SubTotal=?, ShipCharge=?, Tax=?, Total=?
 				WHERE ShopCartID=?";
 		$stmt = $conn->prepare($qry);
-		// "i" - integer, "d" - double
 		$stmt->bind_param("iddddi", $_SESSION["NumCartItem"],
-						  $_SESSION["SubTotal"], $_SESSION["ShipCharge"],
-						  $_SESSION["Tax"], $total,
-						  $_SESSION["Cart"]);
+						$_SESSION["SubTotal"], $_SESSION["ShipCharge"],
+						$_SESSION["Tax"], $total,
+						$_SESSION["Cart"]);
 		$stmt->execute();
 		$stmt->close();
-		// End of To Do 2
 		
 		//We need to execute the "GetTransactionDetails" API Call at this point 
 		//to get customer details
@@ -205,33 +199,32 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 			
 			$ShipEmail = urldecode($httpParsedResponseAr["EMAIL"]);			
 			
-			// To Do 3: Insert an Order record with shipping information
-			//          Get the Order ID and save it in session variable.
-			$qry = "INSERT INTO orderdata (ShipName, ShipAddress, ShipCountry,
-										   ShipEmail, ShopCartID)
-					VALUES (?, ?, ?, ?, ?)";
+			// Insert an Order record with shipping information
+			// Get the Order ID and save it in session variable.
+			$qry = "INSERT INTO OrderData (ShipName, ShipAddress, ShipCountry,
+											ShipEmail, ShopCartID)
+					VALUE (?,?,?,?,?)";
 			$stmt = $conn->prepare($qry);
-			// "i" - integer, "s" - string
-			$stmt->bind_param("ssssi", $ShipName, $ShipAddress, $ShipCountry,
-							  $ShipEmail, $_SESSION["Cart"]);
+			$stmt->bind_param("ssssi", $ShipName, $ShipAddress,
+							 $ShipCountry, $ShipEmail,$_SESSION["Cart"]);	
 			$stmt->execute();
-			$stmt->close();
+			$stmt->close();		
 			$qry = "SELECT LAST_INSERT_ID() AS OrderID";
 			$result = $conn->query($qry);
 			$row = $result->fetch_array();
-			$_SESSION["OrderID"] = $row["OrderID"];
-			// End of To Do 3
+			$_SESSION["OrderID"]= $row["OrderID"];				
 				
 			$conn->close();
 				  
-			// To Do 4A: Reset the "Number of Items in Cart" session variable to zero.
-			$_SESSION["NumCartItem"] = 0;
+			// Reset the "Number of Items in Cart" session variable to zero.
+			$_SESSION["NumCartItem"]= 0;
 	  		
-			// To Do 4B: Clear the session variable that contains Shopping Cart ID.
+			// Clear the session variable that contains Shopping Cart ID.
 			unset($_SESSION["Cart"]);
 			
-			// To Do 4C: Redirect shopper to the order confirmed page.
+			// Redirect shopper to the order confirmed page.
 			header("Location: orderConfirmed.php");
+			exit;
 		} 
 		else 
 		{
@@ -248,5 +241,5 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 	}
 }
 
-include("footer.php"); // Include the Page Layout footer
+include("../footer.php"); // Include the Page Layout footer
 ?>
