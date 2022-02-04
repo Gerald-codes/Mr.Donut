@@ -18,7 +18,7 @@ if (isset($_SESSION["Cart"])) {
 	$qry = "SELECT *, (Price*Quantity) AS Total
 			FROM ShopCartItem WHERE ShopCartID=?";
 	$stmt = $conn->prepare($qry);
-	$stmt->bind_param("i", $_SESSION["Cart"]); // "i" - integer
+	$stmt->bind_param("i", $_SESSION["Cart"]);
 	$stmt->execute();
 	$result = $stmt->get_result();
 	$stmt->close();
@@ -29,37 +29,37 @@ if (isset($_SESSION["Cart"])) {
 		echo "<p class='page-title' style='text-align:center'>Shopping Cart</p>"; 
 		echo "<div class='table-responsive' >"; // Bootstrap responsive table
 		echo "<table class='table table-hover'>"; // Start of table
-		echo "<thread class='cart-header'>"; // Start of table's header section
-		echo "<tr>"; // Start of header row
-		echo "<th width='250px'>Item</th>";
+		echo "<thead class='cart-header'>";
+		echo "<tr>";
+		echo "<th width='250px'>Item</th>"; 
 		echo "<th width='90px'>Price (S$)</th>";
 		echo "<th width='60px'>Quantity</th>";
 		echo "<th width='120px'>Total (S$)</th>";
 		echo "<th>&nbsp;</th>";
-		echo "</tr>"; // End of table row
-		echo "</thead>"; // End of table's header section
+		echo "</tr>";
+		echo "</thread>";
+
 		// To Do 5 (Practical 5):
 		// Declare an array to store the shopping cart items in session variable 
-		$_SESSION["Items"] = array();	
+		$_SESSION["Items"] = array();
 		// To Do 3 (Practical 4): 
 		// Display the shopping cart content
 		$subTotal = 0; // Declare a variable to compute subtotal before tax
 		echo "<tbody>"; // Start of table's body section
 		while ($row = $result->fetch_array()) {
 			echo "<tr>";
-			echo "<td style='width:50%'>$row[Name]<br />";
+			echo "<td style='width:50%'>$row[Name]<br />"; 
 			echo "Product ID: $row[ProductID]</td>";
-			$formattedPrice = number_format($row["Price"], 2);
+			$formattedPrice = number_format($row["Price"],2);
 			echo "<td>$formattedPrice</td>";
-			echo "<td>"; // Column for update quantity of purchase
+			echo "<td>";
 			echo "<form action='cartFunctions.php' method='post'>";
 			echo "<select name='quantity' onChange='this.form.submit()'>";
-			for ($i = 1; $i <= 10; $i++) { // To populate drop-down list from 1 to 10
-				if($i == $row["Quantity"])
-					// Select drop-down list item with value same as quantity of purchase
+			for ($i = 1; $i <= 10; $i++){
+				if ($i == $row["Quantity"])
 					$selected = "selected";
 				else
-					$selected = ""; //No specific item is selected
+					$selected = "";
 				echo "<option value='$i' $selected>$i</option>";
 			}
 			echo "</select>";
@@ -67,22 +67,22 @@ if (isset($_SESSION["Cart"])) {
 			echo "<input type='hidden' name='product_id' value='$row[ProductID]' />";
 			echo "</form>";
 			echo "</td>";
-			$formattedTotal = number_format($row["Total"], 2);
+			$formattedTotal = number_format($row["Total"],2);
 			echo "<td>$formattedTotal</td>";
-			echo "<td>"; // Column for removing item from shopping cart
+			echo "<td>";
 			echo "<form action='cartFunctions.php' method='post'>";
 			echo "<input type='hidden' name='action' value='remove' />";
 			echo "<input type='hidden' name='product_id' value='$row[ProductID]' />";
-			echo "<input type='image' src='../Images/trash-can.png' title='Remove item'/>";
+			echo "<input type='image' src='../Images/trash-can.png' title='Remove Item' />";
 			echo "</form>";
 			echo "</td>";
 			echo "</tr>";
 			// To Do 6 (Practical 5):
 		    // Store the shopping cart items in session variable as an associate array
-			$_SESSION["Items"][] = array("productID"=>$row["ProductID"],
-										 "name"=>$row["Name"],
-										 "price"=>$row["Price"],
-										 "quantity"=>$row["Quantity"]);	
+			$_SESSION["Items"][]= array("productId"=>$row["ProductID"],
+										"name"=>$row["Name"],
+										"price"=>$row["Price"],
+										"quantity"=>$row["Quantity"]);
 			// Accumulate the running sub-total
 			$subTotal += $row["Total"];
 		}
@@ -92,14 +92,28 @@ if (isset($_SESSION["Cart"])) {
 				
 		// To Do 4 (Practical 4): 
 		// Display the subtotal at the end of the shopping cart
-		echo "<p style='text-align:right; font-size:20px'>
-			  Subtotal = S$". number_format($subTotal, 2);
-		$_SESSION["SubTotal"] = round($subTotal, 2);	
+		echo "<h4><p style='text-align:right; font-size:20px'>
+				Subtotal = S$ ".number_format($subTotal, 2);	
+		$_SESSION["SubTotal"] = round($subTotal, 2);
+
 		// To Do 7 (Practical 5):
 		// Add PayPal Checkout button on the shopping cart page
-		echo "<form method='post' action='../Checkout/checkoutProcess.php'>";
-		echo "<input type='image' style='float:right';
-					 src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif'>";		
+		echo('<div class="form-popup" id="getDeliveryMode">');
+		echo('<form action="/action_page.php" class="form-container">');
+		echo('<h1>Login</h1>');
+		echo('<label for="email"><b>Email</b></label>');
+		echo('<input type="text" placeholder="Enter Email" name="email" required>');
+		echo('<label for="psw"><b>Password</b></label>');
+		echo('<input type="password" placeholder="Enter Password" name="psw" required>');
+		echo('<button type="submit" class="btn">Login</button>');
+		echo('<button type="button" class="btn cancel" onclick="closeForm()">Close</button>');
+		echo('</form>');
+		echo('</div>');
+		echo("<button class='open-button' onclick='getDeliveryMode()'>Open Form</button>");
+		// echo "<form method='post' action='../Checkout/checkoutProcess.php'>";
+		// echo "<input type='image' style='float:right;' onclick='getDeliveryMode()'
+		// 			src='https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif'>";
+		// echo "</form></p><h4>";
 	}
 	else {
 		echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";

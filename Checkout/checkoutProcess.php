@@ -1,8 +1,8 @@
 <?php
 session_start();
-include("header.php"); // Include the Page Layout header
+include("../header.php"); // Include the Page Layout header
 include_once("myPayPal.php"); // Include the file that contains PayPal settings
-include_once("mysql_conn.php"); 
+include_once("../Database/mysql_conn.php"); 
 
 if($_POST) //Post Data received from Shopping cart page.
 {
@@ -29,8 +29,7 @@ if($_POST) //Post Data received from Shopping cart page.
 		include("footer.php");
 		exit;
 	}
-	}
-	// End of To Do 6
+}
 	
 	$paypal_data = '';
 	// Get all items from the shopping cart, concatenate to the variable $paypal_data
@@ -42,8 +41,14 @@ if($_POST) //Post Data received from Shopping cart page.
 		$paypal_data .= '&L_PAYMENTREQUEST_0_NUMBER'.$key.'='.urlencode($item["productId"]);
 	}
 	
-	// To Do 1A: Compute GST amount 7% for Singapore, round the figure to 2 decimal places
-	$_SESSION["Tax"] = round($_SESSION["SubTotal"]*0.07, 2);
+	// Compute GST amount 7% for Singapore, round the figure to 2 decimal places
+	$qry = "SELECT TaxRate FROM GST WHERE EffectiveDate < now() order by EffectiveDate DESC LIMIT 1";
+	$stmt = $conn->prepare($qry);
+	$stmt->execute();
+	$result = $stmt->get_result();
+	$stmt->close();	
+	$row = $result->fetch_array();
+	$_SESSION["Tax"] = round($_SESSION["SubTotal"]*($row["TaxRate"]/100),2);
 	
 	// To Do 1B: Compute Shipping charge - S$2.00 per trip
 	$_SESSION["ShipCharge"] = 2.00;	
@@ -135,7 +140,7 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 		// To Do 5 (DIY): Update stock inventory in product table 
 		//                after successful checkout
 		foreach ($_SESSION['Items'] as $item) {
-			$qry = 'SELECT Quantity FROM PRODUCT WHERE ProductID=?'
+			$qry = 'SELECT Quantity FROM PRODUCT WHERE ProductID=?';
 			$stmt->bind_param("i", $item['productID']);
 			$stmt->execute();
 			$result = $stmt->get_result();
