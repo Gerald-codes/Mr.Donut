@@ -48,7 +48,7 @@ while ($row = $result->fetch_array()){
 
     if ($Quantity <= 0){
       echo "<div class='col-8'>";
-      echo "<p><a href=$product>$row[ProductTitle]</a></p>";
+      echo "<p><a href=$product style='color: #d589ac'><h5>$row[ProductTitle]</h5></a></p>";
       echo "<span style='font-weight: bold;color:red;'>
       Out of Stock!</span>";
       echo "</div>";
@@ -57,7 +57,7 @@ while ($row = $result->fetch_array()){
     else{
       if (($row["Offered"] == 1)  && ($OfferStart <= $now && $now <= $OfferEnd)){
         echo "<div class='col-8'>";
-        echo "<p><a href=$product>$row[ProductTitle]</a></p>";
+        echo "<p><a href=$product style='color: #d589ac'><h5>$row[ProductTitle]</h5></a></p>";
         echo "<span style='font-weight: bold;color:grey;'><s>
         S$ $formattedPrice</s></span>";
         echo "<p><span style='font-weight: bold;color:red;'>
@@ -66,7 +66,7 @@ while ($row = $result->fetch_array()){
       }
       else{
         echo "<div class='col-8'>";
-        echo "<p><a href=$product>$row[ProductTitle]</a></p>";
+        echo "<p><a href=$product style='color: #d589ac'><h5>$row[ProductTitle]</h5></a></p>";
         echo "<span style='font-weight: bold;color:red;'>
         S$ $formattedPrice</span>";
         echo "</div>";

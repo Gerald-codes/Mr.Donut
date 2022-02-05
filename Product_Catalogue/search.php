@@ -49,7 +49,7 @@ if (isset($_GET["keywords"]) && trim($_GET['keywords']) != "") {
     if ($result->num_rows > 0) { // If found, display records
         while ($row = $result->fetch_array()){
             $product = "/MrDonut/Mr.Donut/Product_Catalogue/productDetails.php?pid=$row[ProductID]";
-            echo "<p><a href=$product style='color: #d589ac'>$row[ProductTitle]</a></p>";  
+            echo "<p><a href=$product style='color: #d589ac'><h5>$row[ProductTitle]</h5></a></p>";  
             $img = "../Images/Products/$row[ProductImage]";
             echo "<div class='col-4'>";
             echo "<img src='$img'/>";
