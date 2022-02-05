@@ -40,7 +40,7 @@ if(isset($_SESSION["ShopperName"])) {
 </nav>
 <!-- To Do 4 (Practical 1) - 
      Define a collapsible navbar -->
-<nav class="navbar navbar-expand-md navbar-dark bg-custom2">
+<nav class="navbar navbar-expand-md navbar-dark bg-custom">
     <!-- Collapsible part of navbar -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <!-- Left-justified menu items -->

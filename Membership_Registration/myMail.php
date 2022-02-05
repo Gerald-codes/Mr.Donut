@@ -1,8 +1,8 @@
 <?php 
 //loading library required for PHPMailer
 require 'PHPMailer-master/PHPMailerAutoload.php'; 
-define('GUSER', ''); // GMail username to access SMTP mail server
-define('GPWD', ''); // GMail password to access SMTP mail server
+define('GUSER', 'donut12733889@gmail.com'); // GMail username to access SMTP mail server
+define('GPWD', 'Pwd018383'); // GMail password to access SMTP mail server
 
 function smtpmailer($to, $from, $from_name, $subject, $body) { 
 	global $error;

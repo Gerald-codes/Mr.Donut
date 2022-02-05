@@ -31,16 +31,16 @@ if (! isset($_SESSION["ShopperID"])) { // Check if user logged in
         </div>
         <div class="col-sm-6">
             <form method="post">
-                <div>
-                    <input type="radio" name="rate" value="1">1 (Bad)<br/>
-                    <input type="radio" name="rate" value="2">2<br/>
-                    <input type="radio" name="rate" value="3">3 (It's fine)<br/>
-                    <input type="radio" name="rate" value="4">4<br/>
-                    <input type="radio" name="rate" value="5">5 (Excellent)<br/>
+                <div class="form-group row"><input type="radio" name="rate" value="1">1 (Bad)</div>
+                <div class="form-group row"><input type="radio" name="rate" value="1">2</div>
+                <div class="form-group row"><input type="radio" name="rate" value="1">3 (OK)</div>
+                <div class="form-group row"><input type="radio" name="rate" value="1">4</div>
+                <div class="form-group row"><input type="radio" name="rate" value="1">5 (Excellent)</div>
+                <div class="form-group row">
                     <textarea id="comment" name="comment" placeholder="Add your comment" rows="4" cols="50"></textarea>
                 </div>
                 <div class="form-group row">
-                    <button type="submit" class="btn">Rate!</button>
+                    <button type="submit" class="btn-default">Rate!</button>
                 </div>
                 <?php 
                     if(isset($_POST["rate"])){

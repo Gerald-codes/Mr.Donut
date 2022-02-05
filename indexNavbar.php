@@ -29,7 +29,7 @@ if(isset($_SESSION["ShopperName"])) {
 <nav class="navbar navbar-expand-md navbar-dark bg-custom" >
     <!-- Dynamic Text Display -->
     <span class="navbar-text ml-md-2"
-        style="color: #F7BE81; max-width: 80%;">
+        style="color: #FFFFFF; max-width: 80%;">
         <?php echo $content1; ?>
     </span>
     <!-- Toggler/Collapsibe Button -->

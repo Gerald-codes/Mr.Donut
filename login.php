@@ -40,7 +40,7 @@ include("indexHeader.php");
             <div class= "col-sm-9 offset-sm-3" >
                 <button class="btn btn-primary" type='submit' >Login</button>
                 <p>Please sign up if you do not have an account.</p>
-                <p><a href="forgetPassword.php">Forget Password</a></p>
+                <p><a href="Membership_Registration/forgetPassword.php">Forget Password</a></p>
             </div> 
         </div>
     </form>

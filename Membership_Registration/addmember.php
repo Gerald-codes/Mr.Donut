@@ -1,23 +1,28 @@
 <?php
 session_start();
 include_once("../Database/mysql_conn.php");
+include("../header.php");
 $name = $_POST['name'];
 $birthdate = $_POST['birthdate'];
 $address = $_POST['address'];
 $country = $_POST['country'];
 $phone = $_POST['phone'];
-$email = $_POST['email'];
+$email = strtolower($_POST['email']);
 $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
 $pwdquestion = $_POST['pwdquestion'];
 $pwdanswer = $_POST['pwdanswer'];
-$qry = "SELECT * FROM Shopper WHERE Email LIKE ?";
+$qry = "SELECT *,LOWER(Email) FROM Shopper WHERE Email=?";
 $stmt = $conn->prepare($qry);
 $stmt->bind_param("s",$email);
 $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
 $addNewItem=0;
-if(!$result->num_rows>0){
+$rowno = intval($result->num_rows);
+if($rowno>0){
+        echo "<h3 style='color:red'>Error: Email has already been registered</h3>";
+}
+else{
         $qry = "INSERT INTO Shopper (Name, Birthdate, Address, Country, Phone, Email, Password,PwdQuestion,PwdAnswer)
         VALUES(?,?,?,?,?,?,?,?,?)";
         $stmt = $conn->prepare($qry);
@@ -28,20 +33,14 @@ if(!$result->num_rows>0){
                 while ($row = $result -> fetch_array()) {
                         $_SESSION["ShopperID"]=$row["ShopperID"];
         }
-        $Message="Registration Successful! <br/>
+        echo "Registration Successful! <br/>
                 Your Shopper ID is $_SESSION[ShopperID] <br/>";
         $_SESSION["ShopperName"] = $name;
-}
-else{
-    $Message = "<h3 style='color:red'>Error: Email has already been registered</h3>";
 }
 $stmt->close();
 }
 
 
 $conn->close();
-
-include("../header.php");
-echo $Message;
 include("../footer.php")
 ?>
