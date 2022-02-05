@@ -23,7 +23,7 @@ if ($result->num_rows > 0) {
     $stmt->bind_param("si", $hashed_pwd, $shopperId);
     $stmt->execute();
     include("myMail.php");
-    $to="donut12733889@gmail.com";
+    $to=$row['Email'];
     $from="donut12733889@gmail.com";
     $from_name="Mr Donut";
     $subject="Mr Donut Login Password";

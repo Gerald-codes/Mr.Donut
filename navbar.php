@@ -31,7 +31,7 @@ if(isset($_SESSION["ShopperName"])) {
     <div style=" display: flex; justify-content: flex-start;align-items: center; padding:10px; height:60px; width:80%">
         <a href="../index.php" style="width=200px">
                         <img src="../Images/logo.png" alt="Logo"
-                        class="img-fluid" style="width:200px"/></a>
+                        class="img-fluid" style="width:200px;"/></a>
         <div style="box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 9%); margin-left: 20px; width: 100%; border: 3px solid white;
          background-color: white; border-radius: 5px; display:flex; justify-content: space-between;align-items: center;">
             <div style=" width: 100%;">

@@ -32,37 +32,40 @@ if (! isset($_SESSION["ShopperID"])) { // Check if user logged in
         <div class="col-sm-6">
             <form method="post">
                 <div class="form-group row"><input type="radio" name="rate" value="1">1 (Bad)</div>
-                <div class="form-group row"><input type="radio" name="rate" value="1">2</div>
-                <div class="form-group row"><input type="radio" name="rate" value="1">3 (OK)</div>
-                <div class="form-group row"><input type="radio" name="rate" value="1">4</div>
-                <div class="form-group row"><input type="radio" name="rate" value="1">5 (Excellent)</div>
+                <div class="form-group row"><input type="radio" name="rate" value="2">2</div>
+                <div class="form-group row"><input type="radio" name="rate" value="3">3 (OK)</div>
+                <div class="form-group row"><input type="radio" name="rate" value="4">4</div>
+                <div class="form-group row"><input type="radio" name="rate" value="5">5 (Excellent)</div>
                 <div class="form-group row">
                     <textarea id="comment" name="comment" placeholder="Add your comment" rows="4" cols="50"></textarea>
                 </div>
                 <div class="form-group row">
-                    <button type="submit" class="btn-default">Rate!</button>
+                    <button type="submit" class="btn-primary">Rate!</button>
                 </div>
-                <?php 
-                    if(isset($_POST["rate"])){
-                        $ratevalue = (int)$_POST["rate"];
-                        $sid = $_SESSION["ShopperID"];
-                        $comment = " ";
-                        if(isset($_POST["comment"])){
-                            $comment = $_POST["comment"];
-                        }
-                        $qry = "INSERT INTO Ranking (ShopperID,ProductID,Rank,Comment)
-                        VALUES(?,?,?,?)";
-                        $stmt = $conn->prepare($qry);
-                        $stmt->bind_param("iiis",$sid,$pid,$ratevalue,$comment);
-                        if($stmt->execute()){
-                            echo "<p>Thanks for your rating</p>";
-                        }
-                        else{
-                            echo "<p>Error: Can't rate</p>";
-                        }
-                    }
-                ?>
             </form>
+            <?php 
+                if(isset($_POST["rate"])){
+                    $ratevalue = (int)$_POST["rate"];
+                    $sid = $_SESSION["ShopperID"];
+                    $comment = " ";
+                    if(isset($_POST["comment"])){
+                        $comment = $_POST["comment"];
+                    }
+                    $qry = "INSERT INTO Ranking (ShopperID,ProductID,Rank,Comment)
+                    VALUES(?,?,?,?)";
+                    $stmt = $conn->prepare($qry);
+                    $stmt->bind_param("iiis",$sid,$pid,$ratevalue,$comment);
+                    if($stmt->execute()){
+                        echo "<p>Thanks for your rating</p>";
+                    }
+                    else{
+                        echo "<p>Error: Can't rate</p>";
+                    }
+                }
+                else{
+                    echo "<script>alert('Please select a rating')</script>";
+                }
+            ?>
         </div>
     </div>
 </div>

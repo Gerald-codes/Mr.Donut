@@ -16,6 +16,7 @@ $result = $stmt->get_result();
 $stmt->close();
 if ($result->num_rows > 0) {
     $row = $result->fetch_array();
+    $name = $row['Name'];
     $email = $row['Email'];
     $pass = $row['Password'];
     $cou = $row["Country"];
@@ -30,7 +31,24 @@ else{
     <form action="" method="post">
         <div class="form-group row">
             <div class="col-sm-4 offset-sm-3">
-                <span class="page-title">Change Email Address</span>
+                <span class="page-title">Update Profile</span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="email">
+                Name:
+            </label>
+            <div class="col-sm-4">
+                <?php echo "<b>$name</b>"; ?>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label" for="name">
+                New Name:
+            </label>
+            <div class="col-sm-4">
+                <input class="form-control" type="text"
+                    name="name" id="name" />
             </div>
         </div>
         <div class="form-group row">
@@ -55,27 +73,38 @@ else{
                 <button type="submit">Update</button>
             </div>
             <?php
-                if (isset($_POST['email2']) && trim($_POST['email2']) != "" ) {
-                    $email = $_POST['email2'];
-                    //Validation for email to be added
-                    $qry = "SELECT * FROM Shopper WHERE Email=?" ;
+            if(isset($_POST['name']) && trim($_POST['name']) != "" ){
+                $nm = $_POST["name"];
+                $qry = "UPDATE Shopper SET Name=? WHERE ShopperID=?" ;
+                $stmt = $conn->prepare($qry);
+                $stmt->bind_param("si",$nm,$_SESSION["ShopperID"]);
+                $stmt->execute();
+                $stmt->close();
+                echo "<script>alert('Name updated')</script>";
+            }
+            
+            if (isset($_POST['email2']) && trim($_POST['email2']) != "" ) {
+                $email = $_POST['email2'];
+                //Validation for email to be added
+                $qry = "SELECT * FROM Shopper WHERE Email=?" ;
+                $stmt = $conn->prepare($qry);
+                $stmt->bind_param("s",$email);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $stmt->close();
+                $value = $result->num_rows;
+                if ($result->num_rows > 0) {
+                    echo "<p>Email in use</p>";
+                }
+                else{
+                    $qry = "UPDATE Shopper SET Email=? WHERE ShopperID=?" ;
                     $stmt = $conn->prepare($qry);
-                    $stmt->bind_param("s",$email);
+                    $stmt->bind_param("si",$email,$_SESSION["ShopperID"]);
                     $stmt->execute();
-                    $result = $stmt->get_result();
                     $stmt->close();
-                    $value = $result->num_rows;
-                    if ($result->num_rows > 0) {
-                        echo "<p>Email in use</p>";
-                    }
-                    else{
-                        $qry = "UPDATE Shopper SET Email=? WHERE ShopperID=?" ;
-                        $stmt = $conn->prepare($qry);
-                        $stmt->bind_param("si",$email,$_SESSION["ShopperID"]);
-                        $stmt->execute();
-                        $stmt->close();
-                    }
-                } ?>
+                    echo "<script>alert('Email updated')</script>";
+                }
+            } ?>
         </div>
     </form>
     <script type="text/javascript">
@@ -83,7 +112,7 @@ else{
     {
         // Check if password matched
         if (document.passform.pwd1.value != document.passform.pwd2.value) {
-            alert("Passwords not matched!");
+            alert("New passwords not matched!");
             return false;   // cancel submission
         }
         return true;  // No error found
@@ -176,31 +205,8 @@ else{
     </form>
 </div>
 <?php
-if (isset($_POST['email2']) && trim($_POST['email2']) != "" ) {
-    $email = $_POST['email2'];
-    //Validation for email to be added
-    $qry = "SELECT * FROM Shopper WHERE Email=?" ;
-    $stmt = $conn->prepare($qry);
-    $stmt->bind_param("s",$email);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $stmt->close();
-    $value = $result->num_rows;
-    if ($result->num_rows > 0) {
-        echo "<script>alert('Email in use')</alert>";
-    }
-    else{
-        echo "<script>alert('Email not in use')</alert>";
-        $qry = "UPDATE Shopper SET Email=? WHERE ShopperID=?" ;
-        $stmt = $conn->prepare($qry);
-        $stmt->bind_param("si",$email,$_SESSION["ShopperID"]);
-        $stmt->execute();
-        $stmt->close();
-    }
-}
 
-if (isset($_POST["pwd1"])) {
-    password_verify($pwd,$hashed_pwd);
+if (isset($_POST["pwd"]) && isset($_POST["pwd1"])) {
 	$qry = "SELECT * FROM Shopper WHERE ShopperID=?" ;
     $stmt = $conn->prepare($qry);
     $stmt->bind_param("i",$_SESSION["ShopperID"]);
@@ -210,11 +216,11 @@ if (isset($_POST["pwd1"])) {
     $value = $result->num_rows;
     if ($result->num_rows > 0) {
         $hashed_pwd = $row['Password'];
-        if(password_verify($_POST["pwd1"],$hashed_pwd)){
+        if(password_verify($_POST["pwd"],$hashed_pwd)){
             $password = password_hash($_POST['pwd2'],PASSWORD_DEFAULT);
             $qry = "UPDATE Shopper SET Password=? WHERE ShopperID=?" ;
             $stmt = $conn->prepare($qry);
-            $stmt->bind_param("s",$password);
+            $stmt->bind_param("si",$password,$_SESSION["ShopperID"]);
             $stmt->execute();
             $stmt->close();
             echo "<script>alert('Password has been updated')</script>";
@@ -235,6 +241,7 @@ if(isset($_POST["country"])){
     $stmt->bind_param("si",$cty,$_SESSION["ShopperID"]);
     $stmt->execute();
     $stmt->close();
+    echo "<script>alert('Country updated')</script>";
 }
 if(isset($_POST["address"])){
     $addr = $_POST["address"];
@@ -243,9 +250,9 @@ if(isset($_POST["address"])){
     $stmt->bind_param("si",$addr,$_SESSION["ShopperID"]);
     $stmt->execute();
     $stmt->close();
+    echo "<script>alert('Address updated')</script>";
 }
 
 $conn->close();
-// Include the Page Layout footer
 include("../footer.php"); 
 ?>

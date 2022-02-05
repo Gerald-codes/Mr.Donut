@@ -40,21 +40,20 @@ function validateForm()
     <div class="form-group row">
         <div class="col-sm-9 offset-sm-3">
             <span class="page-title">Register</span>
-            <p>All fields are required</p>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label" for="name">Name:</label>
         <div class="col-sm-5">
             <input class="form-control" name="name" id="name" 
-                   type="text" required />
+                   type="text" required />required
         </div>
     </div>
     <div class="form-group row">
     <label class="col-sm-2 col-form-label" for="birthdate">Date of Birth:</label>
     <div class="col-sm-3">
             <input class="form-control" name="birthdate" id="birthdate" 
-                   type="date" max="2000-01-01" required />
+                   type="date" max="2000-01-01" required />required
         </div>
         <script>
             var maxdate = new Date();
@@ -73,19 +72,19 @@ function validateForm()
         <label class="col-sm-2 col-form-label" for="address">Address:</label>
         <div class="col-sm-5">
             <textarea class="form-control" name="address" id="address"
-                      cols="25" rows="4" required></textarea>
+                      cols="25" rows="4"></textarea>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label" for="country">Country:</label>
         <div class="col-sm-5">
-            <input class="form-control" name="country" id="country" type="text" required/>
+            <input class="form-control" name="country" id="country" type="text"/>
         </div>
     </div>
     <div class="form-group row">
         <label class="col-sm-2 col-form-label" for="phone">Phone:</label>
         <div class="col-sm-5">
-            <input class="form-control" name="phone" id="phone" type="text" required/>
+            <input class="form-control" name="phone" id="phone" type="text"/>
         </div>
     </div>
     <p>Phone number must start with 8-9 and have only 8 digits</p>
@@ -94,7 +93,7 @@ function validateForm()
             Email Address:</label>
         <div class="col-sm-5">
             <input class="form-control" name="email" id="email" 
-                   type="email" required />
+                   type="email" required />required
         </div>
     </div>
     <div class="form-group row">
@@ -102,7 +101,7 @@ function validateForm()
             Password:</label>
         <div class="col-sm-5">
             <input class="form-control" name="password" id="password" 
-                   type="password" required />
+                   type="password" required />required
         </div>
     </div>
     <div class="form-group row">
@@ -110,7 +109,7 @@ function validateForm()
             Confirm Password:</label>
         <div class="col-sm-5">
             <input class="form-control" name="password2" id="password2" 
-                   type="password" required />
+                   type="password" required />required
         </div>
     </div>
     <div class="form-group row">
@@ -121,7 +120,7 @@ function validateForm()
             Security Question:</label>
         <div class="col-sm-5">
             <input class="form-control" name="pwdquestion" id="pwdquestion" 
-                   type="text" required />
+                   type="text" required />required
         </div>
     </div>
     <div class="form-group row">
@@ -129,7 +128,7 @@ function validateForm()
             Answer to Security Question:</label>
         <div class="col-sm-5">
             <input class="form-control" name="pwdanswer" id="pwdanswer" 
-                   type="text" required />
+                   type="text" required />required
         </div>
     </div>
     <div class="form-group row">       

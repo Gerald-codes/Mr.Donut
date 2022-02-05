@@ -95,7 +95,7 @@ if ($Quantity <= 0){
     echo "<button class='btn btn-primary btn-sm' style='margin-left:3px' type='submit' disabled> Add to Cart </button>";
     echo "</form>";
     $link = "../Membership_Registration/ranking.php?pid=$pid";
-    //echo "<a href=$link><button class='btn btn-primary btn-sm' style='margin-left:3px' >Rate me!</button></a>";
+    echo "<a href=$link><button class='btn btn-primary btn-sm' style='margin-left:3px' >Rate me!</button></a>";
     echo "</div>";
     echo "</div>";
 }
@@ -108,7 +108,7 @@ else {
     echo "<button class='btn btn-primary btn-sm' style='margin-left:3px' type='submit'> Add to Cart </button>";
     echo "</form>";
     $link = "../Membership_Registration/ranking.php?pid=$pid";
-    #echo "<a href=$link><button class='btn btn-primary btn-sm' style='margin-left:3px' >Rate me!</button></a>";
+    echo "<a href=$link><button class='btn btn-primary btn-sm' style='margin-left:3px' >Rate me!</button></a>";
     echo "</div>";
     echo "</div>";
 }
