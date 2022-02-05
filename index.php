@@ -7,11 +7,11 @@ include("indexHeader.php");
 include_once("Database/mysql_conn.php");
 ?>
 
-<div style="text-align:center"><h2>Sales</h2></div>
+<div style="text-align:center" class="text-danger"><marquee scrollamount='9'><h2>Now on Sale!</h2></marquee></div>
 <?php 
 
 // From SQL to retrieve list of products associated to the category ID
-$qry = "SELECT `ProductTitle`,`ProductImage`,`OfferedPrice` 
+$qry = "SELECT `ProductTitle`,`ProductImage`,`OfferedPrice`,  `ProductID`
         FROM `Product` WHERE now() BETWEEN `OfferStartDate` 
         AND `OfferEndDate`";
 // Test with multiple items
@@ -26,10 +26,11 @@ $stmt->close();
 echo "<div id='offered-img' class='row' >";
 // Display each product in a row 
 while ($row = $result->fetch_array()){
+     $product = "/MrDonut/Mr.Donut/Product_Catalogue/productDetails.php?pid=$row[ProductID]";
      echo " <div style='margin:auto'>";
      $img = "./Images/Products/$row[ProductImage]";
      echo "<img src='$img' class='offered-img'/>";
-     echo "<h4>$row[ProductTitle]</h4>";
+     echo "<h4><a href=$product style='color: black'>$row[ProductTitle]</a></h4>";
      echo "<div style='text-align:center'><span>Offered Price: $row[OfferedPrice]</span><div>";
      echo "</div>";
 }

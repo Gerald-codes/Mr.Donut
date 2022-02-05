@@ -7,7 +7,6 @@ include("../header.php");
 include_once("../Database/mysql_conn.php");
 ?>
 
-<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />-->
 <!-- HTML Form to collect search keyword and submit it to the same page in server -->
 <div style="width:80%; margin:auto;"> <!-- Container -->
 <form name="frmSearch" method="GET" action="search.php">
@@ -18,16 +17,6 @@ include_once("../Database/mysql_conn.php");
         </div>
     </div> <!-- End of 1st row -->
     <div class="form-group row"> <!-- 2nd row -->
-        <!-- <div class="col-sm-3"> 
-            <select name="sweetness" class="form-control" id="sweetness">
-            <option value="0">Select Sweetness</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            </select> -->
-        <!-- </div> -->
         <label for="keywords" 
                class="col-sm-1 col-form-label">Search:</label>
         <div class="col-sm-5">
@@ -35,7 +24,7 @@ include_once("../Database/mysql_conn.php");
                    type="search" />
         </div>
         <div class="col-sm-3">
-            <button type="submit">Search</button>
+            <button class="btn btn-primary" style="background-color: #f89ec9; border-color: #f89ec9" type='submit' >Search</button>
         </div>
     </div>  <!-- End of 2nd row -->
 </form>
@@ -45,21 +34,26 @@ include_once("../Database/mysql_conn.php");
 
 // The non-empty search keyword is sent to server
 if (isset($_GET["keywords"]) && trim($_GET['keywords']) != "") {
-    // Retrieve list of product records with "ProductTitle" 
-	// contains the keyword entered by shopper, and display them in a table.
-    include_once("../Database/mysql_conn.php");
+    
     $keywords = $_GET['keywords'];
-    $qry = "SELECT * FROM productspec ps INNER JOIN product p ON ps.ProductID=p.ProductID
+    $qry = "SELECT * FROM product p INNER JOIN productspec ps ON p.ProductID=ps.ProductID
             WHERE p.ProductTitle LIKE '%$keywords%'
             OR p.ProductDesc LIKE '%$keywords%'
-            OR ps.SpecVal LIKE '%$keywords%'" ;
+            OR ps.SpecVal LIKE '%$keywords%'
+            OR p.Price <= '$keywords'
+            OR p.OfferedPrice <= '$keywords'" ;
     $result = $conn->query($qry); 
     
-
+    echo "Search results for: $keywords";
+    echo "</p>";
     if ($result->num_rows > 0) { // If found, display records
         while ($row = $result->fetch_array()){
             $product = "/MrDonut/Mr.Donut/Product_Catalogue/productDetails.php?pid=$row[ProductID]";
-            echo "<p><a href=$product>$row[ProductTitle]</a></p>";  
+            echo "<p><a href=$product style='color: #d589ac'>$row[ProductTitle]</a></p>";  
+            $img = "../Images/Products/$row[ProductImage]";
+            echo "<div class='col-4'>";
+            echo "<img src='$img'/>";
+            echo "</div>";
         }
     }
     else {
