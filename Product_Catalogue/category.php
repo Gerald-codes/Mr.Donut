@@ -17,7 +17,7 @@ include("../header.php"); // Include the Page Layout header
 include_once("../Database/mysql_conn.php");
 
 // To Do:  Starting ....
-$qry = "SELECT * FROM Category";
+$qry = "SELECT * FROM Category ORDER BY CatName";
 $result = $conn->query($qry);
 
 // Display each category in a row 
