@@ -26,10 +26,10 @@ if(isset($_SESSION["ShopperName"])) {
 <link rel="stylesheet" href="css/site.css">
 <!-- To Do 3 (Practical 1) - 
      Display a navbar which is visible before or after collapsing -->
-<nav class="navbar navbar-expand-md navbar-dark bg-custom">
+<nav class="navbar navbar-expand-md navbar-dark bg-custom" style="background-color:#ff9ccc;">
     <!-- Dynamic Text Display -->
     <span class="navbar-text ml-md-2"
-        style="color: #F7BE81; max-width: 80%;">
+        style="color: #FFFFFF; max-width: 80%;">
         <?php echo $content1; ?>
     </span>
     <!-- Toggler/Collapsibe Button -->
@@ -44,7 +44,7 @@ if(isset($_SESSION["ShopperName"])) {
     <!-- Collapsible part of navbar -->
     <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <!-- Left-justified menu items -->
-        <ul class= "navbar-nav mr-auto">
+        <ul class= "navbar-nav mr-auto" style="color:#ffffff;">
             <li class="nav-item" >
                 <a class="nav-link" href="../Product_Catalogue/category.php">Product Categories</a>
             </li>
@@ -53,6 +53,9 @@ if(isset($_SESSION["ShopperName"])) {
             </li>
             <li class="nav-item" >
                 <a class="nav-link" href="../Shopping_Cart/shoppingCart.php">Shopping Cart</a>
+            </li>
+            <li class="nav-item" >
+                <a class="nav-link" href="../Membership_Registration/allranking.php">Donut Ratings</a>
             </li>
         </ul>
         <!-- Right-justified menu items -->

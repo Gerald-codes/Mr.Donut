@@ -20,7 +20,8 @@ $stmt->close();
 $addNewItem=0;
 $rowno = intval($result->num_rows);
 if($rowno>0){
-        echo "<h3 style='color:red'>Error: Email has already been registered</h3>";
+        echo "<div class='container'><h3 style='color:red'>Error: Email has already been registered</h3><br/>";
+        echo "<h3><a href='register.php>Back to Registration</a></h3></div>";
 }
 else{
         $qry = "INSERT INTO Shopper (Name, Birthdate, Address, Country, Phone, Email, Password,PwdQuestion,PwdAnswer)
