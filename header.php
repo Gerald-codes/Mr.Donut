@@ -18,15 +18,12 @@
             <!-- 1st Row -->
             <div class="row">
                 <div class="col-sm-12">
-                    <a href="../index.php">
-                        <img src="../Images/banner.png" alt="Logo"
-                        class="img-fluid" style="width:100%"/></a>
                 </div>
             </div>
             <!-- 2nd Row -->
             <div class="row">
                 <div class="col-sm-12">
-                    <?php include ("navbar.php") ; ?>
+                    <?php include ("../navbar.php") ; ?>
                 </div>
             </div>
             <!-- 3rd Row -->

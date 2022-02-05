@@ -14,14 +14,18 @@ function validateForm()
         return false;
     }
 	// To Do 2 - Check if telephone number entered correctly
-	if(document.register.phone.value = ""){
+	if(!document.register.phone.value == ""){
         var str = document.register.phone.value;
         if(str.length != 8){
             alert("Please Enter an 8 digit number");
             return false;
         }
-        else if(str.substr(0,1) != "8" && str.substr(0,1) != "9"){
+        if(str.substr(0,1) != "8" && str.substr(0,1) != "9"){
             alert("Phone Number should start with an 8 or 9");
+            return false;
+        }
+        if (isNaN(str)){
+            alert("Please enter only numbers");
             return false;
         }
     }
@@ -130,7 +134,7 @@ function validateForm()
     </div>
     <div class="form-group row">       
         <div class="col-sm-9 offset-sm-3">
-            <button type="submit" class="btn-default">Register</button>
+            <button type="submit" class="btn-primary">Register</button>
         </div>
     </div>
 </form>
