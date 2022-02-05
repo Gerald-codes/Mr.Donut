@@ -101,7 +101,7 @@ if (isset($_SESSION["Cart"])) {
 		echo("<p> delivered within 1 working day after an order is placed</p>");
 		echo("<div class='options'>");
 		echo('<input type="radio" id="express" name="ShipCharge" value="5">');
-		echo('<label for="express"><h5>Express Delivery</h5></label>');
+		echo('<label for="express"><h5>Express Delivery</h5><p>$5</p></label>');
 		echo("</div>");
 		echo("<p> delivered within 2 hours after an order is placed</p>");
 
