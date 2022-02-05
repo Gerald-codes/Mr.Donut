@@ -2,13 +2,15 @@
 // Include the code that contains shopping cart's functions.
 // Current session is detected in cartFunctions.php, hence need not start session here.
 include_once("cartFunctions.php");
-include("../header.php"); // Include the Page Layout header
 
 if (! isset($_SESSION["ShopperID"])) { // Check if user logged in 
 	// redirect to login page if the session variable shopperid is not set
 	header ("Location: ../login.php");
 	exit;
 }
+
+include("../header.php"); // Include the Page Layout header
+
 
 echo "<div id='myShopCart' style='margin:auto'>"; // Start a container
 if (isset($_SESSION["Cart"])) {
@@ -90,13 +92,7 @@ if (isset($_SESSION["Cart"])) {
 			$totalQuantity += $purchased['quantity'];
 		}
 
-		echo "<p style='text-align:right; font-size:20px'>
-			  Subtotal = S$". number_format($subTotal, 2), 
-			  "</br>Total quantity of items: $totalQuantity"; // Additional 2. Compute number of items in cart
-		$_SESSION["SubTotal"] = round($subTotal, 2);	
-
 		// Add PayPal Checkout button on the shopping cart page
-		echo("<button class='open-button' onclick='openForm()'>checkout</button>");
 		echo('<div class="form-popup" id="deliveryForm">');
 		echo('<form method="post" action="../Checkout/checkoutProcess.php" class="form-container">');
 		echo('<h2 id="form-header">Delivery Option</h2>');
@@ -107,17 +103,44 @@ if (isset($_SESSION["Cart"])) {
 		echo("<p> delivered within 1 working day after an order is placed</p>");
 		echo("<div class='options'>");
 		echo('<input type="radio" id="express" name="ShipCharge" value="5">');
-		echo('<label for="express"><h5>Express Delivery</h5></label>');
+		echo('<label for="express"><h5>Express Delivery</h5><p>$5</p></label>');
 		echo("</div>");
 		echo("<p> delivered within 2 hours after an order is placed</p>");
+
+		echo "<p style='text-align:right; font-size:20px'>
+		Subtotal = S$". number_format($subTotal, 2), 
+		"</br>Total quantity of items: $totalQuantity"; // Additional 2. Compute number of items in cart
+  		$_SESSION["SubTotal"] = round($subTotal, 2);	
+
 		echo("<div class='buttonContainer'>");
 		echo "<input id='formButton' type='image' style='float:right;' onclick='getDeliveryMode()'
 					src='https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-large.png' 
 					alt='Buy now with PayPal'>";
-		echo('<button type="button" class="closebtn" onclick="closeForm()">Close</button>');
 		echo('</div>');
 		echo('</div>');
 		echo('</form>');
+
+		// Retrieve ShipCharge
+		$qry2 = "SELECT ShipCharge FROM ShopCart WHERE ShopCartID=?";
+		$stmt = $conn->prepare($qry2);
+		$stmt->bind_param("i", $_SESSION["Cart"]);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$row2 = $result->fetch_array();
+		$_SESSION['ShipCharge'] = $row2['ShipCharge'];
+		$stmt->close();
+
+		// Addtional 2. Check if subtotal > 50, and change ShipCharge if it is 
+		if ($_SESSION['ShipCharge'] == 2) {
+			if ($subTotal > 50) {
+				$_SESSION['ShipCharge'] = 0;
+				$sql = "UPDATE ShopCart SET ShipCharge = ? WHERE ShopCartId = ?  ";
+                $stmt2 = $conn->prepare($sql);
+                $stmt2->bind_param("di",$_SESSION['ShipCharge'], $_SESSION["Cart"]);
+                $stmt2->execute();
+                $stmt2->close();
+			}
+		}
 	}
 	else {
 		echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";

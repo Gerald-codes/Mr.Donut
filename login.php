@@ -19,7 +19,7 @@ include("indexHeader.php");
             <Label class="col-sm-3 col-form-label" for="email">
                 Email Address:
             </label>
-            <div class="col-sm-9">
+            <div class="col-sm-6">
             <input class="form-control" type="email"
                 name="email" id="email" required />
             </div>
@@ -29,7 +29,7 @@ include("indexHeader.php");
             <label class="col-sm-3 col-form-label" for="password">
             Password:
             </label>
-            <div class="col-sm-9">
+            <div class="col-sm-6">
                 <input class="form-control" type="password"
                     name="password" id="password"
                 required/>
@@ -38,7 +38,8 @@ include("indexHeader.php");
         <!-- 4th row - Login button  -->
         <div class="form-group row" >
             <div class= "col-sm-9 offset-sm-3" >
-                <button class="btn btn-primary" type='submit' >Login</button>
+                <button class="btn btn-primary" style="background-color: #f89ec9; border-color: #f89ec9" type='submit' >Login</button>
+                <p></p>
                 <p>Please sign up if you do not have an account.</p>
                 <p><a href="Membership_Registration/forgetPassword.php">Forget Password</a></p>
             </div> 
