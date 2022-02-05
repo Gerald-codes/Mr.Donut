@@ -20,14 +20,16 @@ include_once("../Database/mysql_conn.php");
 $cid=$_GET["cid"]; // Read catgory id from query string
 
 // From SQL to retrieve list of products associated to the category ID
-$qry = "SELECT p.ProductID, p.ProductTitle, p.ProductImage, p.Price, p.Quantity 
-		FROM CatProduct cp INNER JOIN Product p ON cp.ProductID=p.ProductID
-		WHERE cp.CategoryID=?";
+$qry = "SELECT*FROM CatProduct cp INNER JOIN Product p ON cp.ProductID=p.ProductID
+		WHERE cp.CategoryID=?
+    ORDER BY p.ProductTitle ";
 $stmt = $conn->prepare($qry);
 $stmt->bind_param("i",$cid);
 $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
+
+
 
 // Display each product in a row 
 while ($row = $result->fetch_array()){
@@ -38,12 +40,39 @@ while ($row = $result->fetch_array()){
     
     $product = "productDetails.php?pid=$row[ProductID]";
 	  $formattedPrice = number_format($row["Price"],2);
+    $OfferedPrice = number_format($row["OfferedPrice"],2);
+    $Quantity = $row["Quantity"];
+    $OfferStart = $row["OfferStartDate"];
+    $OfferEnd = $row["OfferEndDate"];
+    $now = date('Y-m-d');
 
-    echo "<div class='col-8'>";
-    echo "<p><a href=$product>$row[ProductTitle]</a></p>";
-    echo "Price:<span style='font-weight: bold;color:red;'>
-		S$ $formattedPrice</span>";
-    echo "</div>";
+    if ($Quantity <= 0){
+      echo "<div class='col-8'>";
+      echo "<p><a href=$product>$row[ProductTitle]</a></p>";
+      echo "<span style='font-weight: bold;color:red;'>
+      Out of Stock!</span>";
+      echo "</div>";
+    }
+
+    else{
+      if (($row["Offered"] == 1)  && ($OfferStart <= $now && $now <= $OfferEnd)){
+        echo "<div class='col-8'>";
+        echo "<p><a href=$product>$row[ProductTitle]</a></p>";
+        echo "<span style='font-weight: bold;color:grey;'><s>
+        S$ $formattedPrice</s></span>";
+        echo "<p><span style='font-weight: bold;color:red;'>
+        S$ $OfferedPrice</span></p>";
+        echo "</div>";
+      }
+      else{
+        echo "<div class='col-8'>";
+        echo "<p><a href=$product>$row[ProductTitle]</a></p>";
+        echo "<span style='font-weight: bold;color:red;'>
+        S$ $formattedPrice</span>";
+        echo "</div>";
+      }
+    }
+    
 
     // Right Column - Display the product's image 
     $img = "../Images/Products/$row[ProductImage]";
