@@ -2,9 +2,9 @@
 // Detect the current session
 session_start();
 // Include the Page Layout header
-include("indexHeader.php"); 
+include("../header.php"); 
 // Include the PHP file that establishes database connection handle: $conn
-include_once("Database/mysql_conn.php");
+include_once("../Database/mysql_conn.php");
 ?>
 
 <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />-->
@@ -47,7 +47,7 @@ include_once("Database/mysql_conn.php");
 if (isset($_GET["keywords"]) && trim($_GET['keywords']) != "") {
     // Retrieve list of product records with "ProductTitle" 
 	// contains the keyword entered by shopper, and display them in a table.
-    include_once("Database/mysql_conn.php");
+    include_once("../Database/mysql_conn.php");
     $keywords = $_GET['keywords'];
     $qry = "SELECT * FROM productspec ps INNER JOIN product p ON ps.ProductID=p.ProductID
             WHERE p.ProductTitle LIKE '%$keywords%'
@@ -75,5 +75,5 @@ if (isset($_GET["keywords"]) && trim($_GET['keywords']) != "") {
 $conn->close(); // Close database connnection
 echo "</div>"; // End of container
 // Include the Page Layout footer
-include("footer.php"); 
+include("../footer.php"); 
 ?>

@@ -64,7 +64,7 @@ if(isset($_SESSION["ShopperName"])) {
                 <a class="nav-link" href="Product_Catalogue/category.php">Product Categories</a>
             </li>
             <li class="nav-item" >
-                <a class="nav-link" href="search.php">Product Search</a>
+                <a class="nav-link" href="Product_Catalogue/search.php">Product Search</a>
             </li>
             <li class="nav-item" >
                 <a class="nav-link" href="Shopping_Cart/shoppingCart.php">Shopping Cart</a>
