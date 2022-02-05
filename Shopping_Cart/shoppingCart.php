@@ -1,14 +1,15 @@
 <?php 
-// Include the code that contains shopping cart's functions.
-// Current session is detected in cartFunctions.php, hence need not start session here.
-include_once("cartFunctions.php");
-include("../header.php"); // Include the Page Layout header
-
 if (! isset($_SESSION["ShopperID"])) { // Check if user logged in 
 	// redirect to login page if the session variable shopperid is not set
 	header ("Location: ../login.php");
 	exit;
 }
+
+// Include the code that contains shopping cart's functions.
+// Current session is detected in cartFunctions.php, hence need not start session here.
+include_once("cartFunctions.php");
+include("../header.php"); // Include the Page Layout header
+
 
 echo "<div id='myShopCart' style='margin:auto'>"; // Start a container
 if (isset($_SESSION["Cart"])) {

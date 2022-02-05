@@ -2,7 +2,7 @@
 // Detect the current session
 session_start();
 // Include the Page Layout header
-include("indexHeader.php"); 
+// include("indexHeader.php"); 
 include_once("Database/mysql_conn.php");
 
 // Reading inputs entered in previous page
