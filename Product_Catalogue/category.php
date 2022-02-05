@@ -28,17 +28,19 @@ while ($row = $result->fetch_array()){
     $catname = urlencode($row["CatName"]);
     $catproduct = "catProduct.php?cid=$row[CategoryID]&catName=$catname";
     echo "<div class='col-8'>";
-    echo "<p><a href=$catproduct>$row[CatName]</a></p>";
+    echo "<p><a href=$catproduct style='color: #d589ac'><h5>$row[CatName]</h5></a></p>";
     echo "$row[CatDesc]";
     echo "</div>";
 
     // Right Column - Display the catgory's image 
     $img = "../Images/Category/$row[CatImage]";
     echo "<div class='col-4'>";
+    echo "</p>";
     echo "<img src='$img'/>";
     echo "</div>";
 
     echo "</div>";
+    echo "</p>";
 }
 // To Do:  Ending ....
 
