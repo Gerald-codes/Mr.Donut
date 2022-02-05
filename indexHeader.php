@@ -15,21 +15,11 @@
 
     <body>
         <div class="container">
-            <!-- 1st Row -->
             <div class="row">
                 <div class="col-sm-12">
-                    <a href="index.php">
-                        <img src="Images/banner.png" alt="Logo"
-                        class="img-fluid" style="width:100%"/></a>
+                    <?php include ("indexNavbar.php"); ?>
                 </div>
             </div>
-            <!-- 2nd Row -->
-            <div class="row">
-                <div class="col-sm-12">
-                    <?php include ("indexNavbar.php") ; ?>
-                </div>
-            </div>
-            <!-- 3rd Row -->
             <div class="row">
                 <div class="col-sm-12" style="padding: 15px;">
                     <!-- define customised content here -->
