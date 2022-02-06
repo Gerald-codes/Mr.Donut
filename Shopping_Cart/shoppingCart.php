@@ -15,7 +15,7 @@ echo "<div id='myShopCart' style='margin:auto'>"; // Start a container
 if (isset($_SESSION["Cart"])) {
 	include_once("../Database/mysql_conn.php");
 
-	$qry = "SELECT s.*, (p.OfferedPrice*s.Quantity) AS Total, p.OfferedPrice
+	$qry = "SELECT s.*, (p.OfferedPrice*s.Quantity) AS discountTotal, p.OfferedPrice, (s.Price*s.Quantity) AS Total
 			FROM ShopCartItem AS s
 			JOIN Product AS p
 			ON s.ProductID = p.ProductID
@@ -26,7 +26,7 @@ if (isset($_SESSION["Cart"])) {
 	$stmt->execute();
 	$result = $stmt->get_result();
 	$stmt->close();
-	
+
 	// Create product details table
 	if ($result->num_rows > 0) {
 		echo "<p class='page-title' style='text-align:center'>Shopping Cart</p>"; 
@@ -44,13 +44,20 @@ if (isset($_SESSION["Cart"])) {
 
 		$_SESSION["Items"] = array();	
 
+		
+
 		$subTotal = 0; // Declare a variable to compute subtotal before tax
 		echo "<tbody>"; // Start of table's body section
 		while ($row = $result->fetch_array()) {
 			echo "<tr>";
 			echo "<td style='width:50%'>$row[Name]<br />"; 
 			echo "Product ID: $row[ProductID]</td>";
-			$formattedPrice = number_format($row["OfferedPrice"],2);
+			if ($row['OfferedPrice'] == 0) { // Check if discounted price exists
+				$formattedPrice = number_format($row["Price"],2); // Does not exist, echo original price
+			}
+			else {
+				$formattedPrice = number_format($row["OfferedPrice"],2); // Does exist, echo discounted price
+			}
 			echo "<td>$formattedPrice</td>";
 			echo "<td>";
 			echo "<form action='cartFunctions.php' method='post'>";
