@@ -1,14 +1,23 @@
 <?php
 session_start();
 include("../header.php"); // Include the Page Layout header
-include_once("myPayPal.php"); // Include the file that contains PayPal settings
+include_once("./myPayPal.php"); // Include the file that contains PayPal settings
 include_once("../Database/mysql_conn.php"); 
 
 if($_POST) //Post Data received from Shopping cart page.
 {
+	// Checkout Package - Basic Requirement 1
 	if (isset($_POST['ShipCharge'])) {
 		$_SESSION["ShipCharge"] =  $_POST['ShipCharge'];
+		if ($_POST['ShipCharge'] == "2"){
+			$_SESSION["DeliveryMode"] = "Normal";
+			$_SESSION["DeliveryDate"] = date("Y-m-d", time() + 7200);
+		}else{
+			$_SESSION["DeliveryMode"] = "Express";
+			$_SESSION["DeliveryDate"] = date("Y-m-d", time() + 86400);
+		}
 	}
+	// Checkout Package - Additional Requirement 1
 	//  Check to ensure each product item saved in the associative array is not out of stock
 	$outOfStock = FALSE;
 	foreach($_SESSION['Items'] as $item) {
@@ -19,15 +28,14 @@ if($_POST) //Post Data received from Shopping cart page.
 		$result = $stmt->get_result();
 		$stmt->close();
 		$row = $result->fetch_array();
-
 		if ($row['Quantity'] < $item['quantity']) {
-			echo "Product $item[productId]: $item[name] is out of stock! <br />;";
+			echo "Product $item[productId]: $item[name] is out of stock! <br />";
 			echo "You ordered $item[quantity] but we only have $row[Quantity] left. <br /><br />";
 			$outOfStock = TRUE;
 		}
 	
 	if ($outOfStock) {
-		echo "Return to shopping cart to amend purchases. <br />";
+		echo "Return to <a href='../Shopping_Cart/shoppingCart.php'>shopping cart</a> to amend purchases. <br />";
 		include("../footer.php");
 		exit;
 	}
@@ -43,6 +51,7 @@ if($_POST) //Post Data received from Shopping cart page.
 		$paypal_data .= '&L_PAYMENTREQUEST_0_NUMBER'.$key.'='.urlencode($item["productId"]);
 	}
 	
+	// Checkout Package - Additional Requirement 2
 	// Compute GST amount from GST Table in DB, round the figure to 2 decimal places
 	$qry = "SELECT TaxRate FROM GST WHERE EffectiveDate < now() order by EffectiveDate DESC LIMIT 1";
 	$stmt = $conn->prepare($qry);
@@ -146,6 +155,7 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 		$result = $stmt->get_result();
 		$stmt->close();
     
+		// Checkout Package - Basic Requirement 3
 		while($row = $result->fetch_array()){
 			$qry = "UPDATE Product SET Quantity = Quantity - ? 
 					WHERE ProductID = ?";
@@ -203,11 +213,11 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 			
 			// Insert an Order record with shipping information
 			// Get the Order ID and save it in session variable.
-			$qry = "INSERT INTO OrderData (ShipName, ShipAddress, ShipCountry,
+			$qry = "INSERT INTO OrderData (DeliveryDate, DeliveryMode, ShipName, ShipAddress, ShipCountry,
 											ShipEmail, ShopCartID)
-					VALUE (?,?,?,?,?)";
+					VALUE (?,?,?,?,?,?,?)";
 			$stmt = $conn->prepare($qry);
-			$stmt->bind_param("ssssi", $ShipName, $ShipAddress,
+			$stmt->bind_param("ssssssi",$_SESSION["DeliveryDate"], $_SESSION["DeliveryMode"], $ShipName, $ShipAddress,
 							 $ShipCountry, $ShipEmail,$_SESSION["Cart"]);	
 			$stmt->execute();
 			$stmt->close();		

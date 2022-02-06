@@ -2,6 +2,7 @@
 session_start(); // Detect the current session
 include("../header.php"); // Include the Page Layout header
 
+// Checkout Package - Basic Requirement 3
 if(isset($_SESSION["OrderID"])) {	
 	echo "<p>Checkout successful. Your order number is $_SESSION[OrderID]</p>";
 	echo "<p>Thank you for your purchase.&nbsp;&nbsp;";
