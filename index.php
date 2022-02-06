@@ -30,8 +30,8 @@ while ($row = $result->fetch_array()){
      echo " <div style='margin:auto'>";
      $img = "./Images/Products/$row[ProductImage]";
      echo "<img src='$img' class='offered-img'/>";
-     echo "<h4><a href=$product style='color: black'>$row[ProductTitle]</a></h4>";
-     echo "<div style='text-align:center'><span>Offered Price: $row[OfferedPrice]</span><div>";
+     echo "<h4><a href=$product style='color: #d589ac'>$row[ProductTitle]</a></h4>";
+     echo "<div style='text-align:center'><span>On sale at $row[OfferedPrice] !</span><div>";
      echo "</div>";
 }
 // To Do:  Ending ....
