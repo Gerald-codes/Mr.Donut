@@ -23,7 +23,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
 
-echo "<div id='offered-img' class='row' >";
+echo "<div id='offered-img' class='row' style='border-color: #f89ec9'>";
 // Display each product in a row 
 while ($row = $result->fetch_array()){
      $product = "/MrDonut/Mr.Donut/Product_Catalogue/productDetails.php?pid=$row[ProductID]";

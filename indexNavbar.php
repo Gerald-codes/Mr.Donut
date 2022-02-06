@@ -32,7 +32,7 @@ if(isset($_SESSION["ShopperName"])) {
         <a href="index.php" style="width=200px">
                         <img src="Images/logo.png" alt="Logo"
                         class="img-fluid" style="width:200px"/></a>
-        <div style="box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 9%); margin-left: 20px; width: 100%; border: 3px solid white;
+        <!-- <div style="box-shadow: 0 0.125rem 0.25rem rgb(0 0 0 / 9%); margin-left: 20px; width: 100%; border: 3px solid white;
          background-color: white; border-radius: 5px; display:flex; justify-content: space-between;align-items: center;">
             <div style=" width: 100%;">
                 <form name="frmSearch" method="GET" action="search.php" autocomplete="off" style=" display: flex;">
@@ -44,7 +44,7 @@ if(isset($_SESSION["ShopperName"])) {
             </button></form>
             </div>
             
-        </div> 
+        </div>  -->
     </div>  
     <span style="color:white"><?php echo $content1; ?> </span>
     <!-- Toggler/Collapsibe Button -->

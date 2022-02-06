@@ -75,10 +75,11 @@ if (isset($_SESSION["Cart"])) {
 			echo "</td>";
 			echo "</tr>";
 
-			$_SESSION["Items"][] = array("productID"=>$row["ProductID"],
+			$_SESSION["Items"][] = array("productId"=>$row["ProductID"],
 										 "name"=>$row["Name"],
 										 "price"=>$row["Price"],
-										 "quantity"=>$row["Quantity"]);	
+										 "quantity"=>$row["Quantity"],
+										 "totalcost"=>$formattedTotal);	
 
 			// Accumulate the running sub-total
 			$subTotal += $row["Total"];
@@ -91,8 +92,13 @@ if (isset($_SESSION["Cart"])) {
 		foreach ($_SESSION["Items"] as $purchased) {
 			$totalQuantity += $purchased['quantity'];
 		}
+		echo "<p style='text-align:right; font-size:20px'>
+		Subtotal = S$". number_format($subTotal, 2), 
+		"</br>Total quantity of items: $totalQuantity"; // Additional 2. Compute number of items in cart
+  		$_SESSION["SubTotal"] = round($subTotal, 2);	
 
 		// Add PayPal Checkout button on the shopping cart page
+		echo("<button class='open-button' onclick='openForm()'>checkout</button>");
 		echo('<div class="form-popup" id="deliveryForm">');
 		echo('<form method="post" action="../Checkout/checkoutProcess.php" class="form-container">');
 		echo('<h2 id="form-header">Delivery Option</h2>');
@@ -106,19 +112,15 @@ if (isset($_SESSION["Cart"])) {
 		echo('<label for="express"><h5>Express Delivery</h5><p>$5</p></label>');
 		echo("</div>");
 		echo("<p> delivered within 2 hours after an order is placed</p>");
-
-		echo "<p style='text-align:right; font-size:20px'>
-		Subtotal = S$". number_format($subTotal, 2), 
-		"</br>Total quantity of items: $totalQuantity"; // Additional 2. Compute number of items in cart
-  		$_SESSION["SubTotal"] = round($subTotal, 2);	
-
 		echo("<div class='buttonContainer'>");
 		echo "<input id='formButton' type='image' style='float:right;' onclick='getDeliveryMode()'
 					src='https://www.paypalobjects.com/webstatic/en_US/i/buttons/checkout-logo-large.png' 
 					alt='Buy now with PayPal'>";
+		echo('<button type="button" class="closebtn" onclick="closeForm()">Close</button>');
 		echo('</div>');
 		echo('</div>');
 		echo('</form>');
+		echo('<a href="../Checkout/checkoutPage.php"> <input type="button" value="Checkoutnow" /> </a>');
 
 		// Retrieve ShipCharge
 		$qry2 = "SELECT ShipCharge FROM ShopCart WHERE ShopCartID=?";
