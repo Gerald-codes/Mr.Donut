@@ -15,8 +15,12 @@ echo "<div id='myShopCart' style='margin:auto'>"; // Start a container
 if (isset($_SESSION["Cart"])) {
 	include_once("../Database/mysql_conn.php");
 
-	$qry = "SELECT *, (Price*Quantity) AS Total
-			FROM ShopCartItem WHERE ShopCartID=?";
+	$qry = "SELECT s.*, (p.OfferedPrice*s.Quantity) AS Total, p.OfferedPrice
+			FROM ShopCartItem AS s
+			JOIN Product AS p
+			ON s.ProductID = p.ProductID
+			WHERE s.ShopCartID=?";
+
 	$stmt = $conn->prepare($qry);
 	$stmt->bind_param("i", $_SESSION["Cart"]);
 	$stmt->execute();
@@ -46,7 +50,7 @@ if (isset($_SESSION["Cart"])) {
 			echo "<tr>";
 			echo "<td style='width:50%'>$row[Name]<br />"; 
 			echo "Product ID: $row[ProductID]</td>";
-			$formattedPrice = number_format($row["Price"],2);
+			$formattedPrice = number_format($row["OfferedPrice"],2);
 			echo "<td>$formattedPrice</td>";
 			echo "<td>";
 			echo "<form action='cartFunctions.php' method='post'>";
