@@ -44,8 +44,6 @@ if (isset($_SESSION["Cart"])) {
 
 		$_SESSION["Items"] = array();	
 
-		
-
 		$subTotal = 0; // Declare a variable to compute subtotal before tax
 		echo "<tbody>"; // Start of table's body section
 		while ($row = $result->fetch_array()) {
@@ -139,6 +137,9 @@ if (isset($_SESSION["Cart"])) {
                 $stmt2->close();
 			}
 		}
+
+		echo "</br>";
+		echo('<center><a href="../Checkout/checkoutPage.php"> <input type="button" class="check" value="Check out now!" /> </a></center>');
 	}
 	else {
 		echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";
@@ -148,9 +149,6 @@ if (isset($_SESSION["Cart"])) {
 else {
 	echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";
 }
-
-echo "</br>";
-echo('<center><a href="../Checkout/checkoutPage.php"> <input type="button" class="check" value="Check out now!" /> </a></center>');
 
 echo "</div>"; // End of container
 include("../footer.php"); // Include the Page Layout footer
