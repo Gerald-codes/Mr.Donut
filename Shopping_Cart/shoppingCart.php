@@ -152,6 +152,7 @@ if (isset($_SESSION["Cart"])) {
                 $stmt2->close();
 			}
 		}
+
 		echo "</br>";
 		echo('<center><a href="../Checkout/checkoutPage.php"> <input type="button" class="check" value="Check out now!" /> </a></center>');
 	}
@@ -163,8 +164,6 @@ if (isset($_SESSION["Cart"])) {
 else {
 	echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";
 }
-
-
 
 echo "</div>"; // End of container
 include("../footer.php"); // Include the Page Layout footer
