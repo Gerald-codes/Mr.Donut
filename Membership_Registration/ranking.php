@@ -14,13 +14,13 @@ if (! isset($_SESSION["ShopperID"])) { // Check if user logged in
         <div class="col-sm-6">
             <?php 
             $pid=$_GET["pid"];
-            $qry = "SELECT * from Product where ProductID=?";
+            $qry = "SELECT * from Product where ProductID=?";//get product from database
             $stmt = $conn->prepare($qry);
             $stmt->bind_param("i", $pid); 	// "i" - integer 
             $stmt->execute();
             $result = $stmt->get_result();
             $stmt->close();
-            while($row=$result->fetch_array()){
+            while($row=$result->fetch_array()){//show product information
                 $img = "../Images/Products/$row[ProductImage]";
                 echo "<h2>$row[ProductTitle]</h2><br/>";
                 echo "<p><img src=$img /></p><br/>";
@@ -44,18 +44,18 @@ if (! isset($_SESSION["ShopperID"])) { // Check if user logged in
                 </div>
             </form>
             <?php 
-                if(isset($_POST["rate"])){
-                    $ratevalue = (int)$_POST["rate"];
+                if(isset($_POST["rate"])){ //if a rating is selected
+                    $ratevalue = (int)$_POST["rate"];//getting the rating value
                     $sid = $_SESSION["ShopperID"];
-                    $comment = " ";
+                    $comment = "";//empty string
                     if(isset($_POST["comment"])){
-                        $comment = $_POST["comment"];
+                        $comment = $_POST["comment"];//fill empty string
                     }
                     $qry = "INSERT INTO Ranking (ShopperID,ProductID,Rank,Comment)
                     VALUES(?,?,?,?)";
                     $stmt = $conn->prepare($qry);
                     $stmt->bind_param("iiis",$sid,$pid,$ratevalue,$comment);
-                    if($stmt->execute()){
+                    if($stmt->execute()){ 
                         echo "<p>Thanks for your rating</p>";
                     }
                     else{

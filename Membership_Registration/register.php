@@ -8,23 +8,23 @@ include_once("../Database/mysql_conn.php");
 <script type="text/javascript">
 function validateForm()
 {
-    // To Do 1 - Check if password matched
+    //Check if password matched
 	if(document.register.password.value != document.register.password2.value){
         alert("Password not matched");
         return false;
     }
-	// To Do 2 - Check if telephone number entered correctly
+	//Check if telephone number is a valid Singapore number
 	if(!document.register.phone.value == ""){
         var str = document.register.phone.value;
-        if(str.length != 8){
+        if(str.length != 8){ //if not 8 digits
             alert("Please Enter an 8 digit number");
             return false;
         }
-        if(str.substr(0,1) != "8" && str.substr(0,1) != "9"){
+        if(str.substr(0,1) != "8" && str.substr(0,1) != "9"){ //if does not start with 8 or 9
             alert("Phone Number should start with an 8 or 9");
             return false;
         }
-        if (isNaN(str)){
+        if (isNaN(str)){ //if not a string
             alert("Please enter only numbers");
             return false;
         }

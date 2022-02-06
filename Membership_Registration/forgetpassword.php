@@ -27,10 +27,10 @@ $stmt->bind_param("s", $_POST['eMail']);
 $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
-if ($result->num_rows > 0) {
+if ($result->num_rows > 0) { //if the email inputted by the user is valid
 	$row = $result->fetch_array();
-	$qn = $row["PwdQuestion"];
-	echo "<form action='forget2.php' method='post'>";
+	$qn = $row["PwdQuestion"]; //password question and answer input form to be displayed
+	echo "<form action='forget2.php' method='post'>";//redirects the user to forget2.php when complete
 	echo "<div class='form-group row'><label class='col-sm-3 col-form-label'>Security Question:</label><label class='col-sm-5 col-form-label'>$qn</label></div>";
 	echo "<div class='form-group row'><label class='col-sm-3 col-form-label' for='answer'>Security Answer:</label><div class='col-sm-5'>";
 	echo '<input class="form-control" name="answer" id="answer" type="text" required /></div></div>';

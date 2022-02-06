@@ -8,6 +8,7 @@ if (! isset($_SESSION["ShopperID"])) { // Check if user logged in
 	header ("Location: ../login.php");
 	exit;
 }
+//gets existing shopper info from database
 $qry = "SELECT * FROM Shopper WHERE ShopperID = ?";
 $stmt = $conn->prepare($qry);
 $stmt->bind_param("i",$_SESSION["ShopperID"]);
@@ -39,7 +40,7 @@ else{
                 Name:
             </label>
             <div class="col-sm-4">
-                <?php echo "<b>$name</b>"; ?>
+                <?php echo "<b>$name</b>"; //shows the name from the database ?>
             </div>
         </div>
         <div class="form-group row">
@@ -56,7 +57,7 @@ else{
                 Current Email Address:
             </label>
             <div class="col-sm-4">
-                <?php echo "<b>$email</b>"; ?>
+                <?php echo "<b>$email</b>"; //shows the email from the database ?>
             </div>
         </div>
         <div class="form-group row">
@@ -73,14 +74,14 @@ else{
                 <button type="submit">Update</button>
             </div>
             <?php
-            if(isset($_POST['name']) && trim($_POST['name']) != "" ){
+            if(isset($_POST['name']) && trim($_POST['name']) != "" ){ //if the name input is not blank
                 $nm = $_POST["name"];
-                $qry = "UPDATE Shopper SET Name=? WHERE ShopperID=?" ;
+                $qry = "UPDATE Shopper SET Name=? WHERE ShopperID=?" ; //change the name
                 $stmt = $conn->prepare($qry);
-                $stmt->bind_param("si",$nm,$_SESSION["ShopperID"]);
+                $stmt->bind_param("si",$nm,$_SESSION["ShopperID"]); //bind param
                 $stmt->execute();
                 $stmt->close();
-                echo "<script>alert('Name updated')</script>";
+                echo "<script>alert('Name updated')</script>";//alert the user
             }
             
             if (isset($_POST['email2']) && trim($_POST['email2']) != "" ) {
@@ -88,12 +89,12 @@ else{
                 //Validation for email to be added
                 $qry = "SELECT * FROM Shopper WHERE Email=?" ;
                 $stmt = $conn->prepare($qry);
-                $stmt->bind_param("s",$email);
+                $stmt->bind_param("s",$email);//check if email exists
                 $stmt->execute();
                 $result = $stmt->get_result();
                 $stmt->close();
                 $value = $result->num_rows;
-                if ($result->num_rows > 0) {
+                if ($result->num_rows > 0) { //if there are results (email exists)
                     echo "<p>Email in use</p>";
                 }
                 else{
@@ -109,7 +110,7 @@ else{
     </form>
     <script type="text/javascript">
     function validateForm()
-    {
+    { 
         // Check if password matched
         if (document.passform.pwd1.value != document.passform.pwd2.value) {
             alert("New passwords not matched!");
@@ -118,7 +119,7 @@ else{
         return true;  // No error found
     }
     </script>
-    <form name="passform" method="post" onsubmit="return validateForm()">
+    <form name="passform" method="post" onsubmit="return validateForm()"><!-- validating password -->
         <div class="form-group row">
             <div class="col-sm-4 offset-sm-3">
                 <span class="page-title">Update Password</span>
@@ -206,7 +207,7 @@ else{
 </div>
 <?php
 
-if (isset($_POST["pwd"]) && isset($_POST["pwd1"])) {
+if (isset($_POST["pwd"]) && isset($_POST["pwd1"])) {//Makes sure existing and new password input are set
 	$qry = "SELECT * FROM Shopper WHERE ShopperID=?" ;
     $stmt = $conn->prepare($qry);
     $stmt->bind_param("i",$_SESSION["ShopperID"]);
@@ -215,10 +216,10 @@ if (isset($_POST["pwd"]) && isset($_POST["pwd1"])) {
     $stmt->close();
     $value = $result->num_rows;
     if ($result->num_rows > 0) {
-        $hashed_pwd = $row['Password'];
-        if(password_verify($_POST["pwd"],$hashed_pwd)){
+        $hashed_pwd = $row['Password']; //existing password
+        if(password_verify($_POST["pwd"],$hashed_pwd)){//check if existing password is valid
             $password = password_hash($_POST['pwd2'],PASSWORD_DEFAULT);
-            $qry = "UPDATE Shopper SET Password=? WHERE ShopperID=?" ;
+            $qry = "UPDATE Shopper SET Password=? WHERE ShopperID=?" ; //update password with new hashed
             $stmt = $conn->prepare($qry);
             $stmt->bind_param("si",$password,$_SESSION["ShopperID"]);
             $stmt->execute();
