@@ -6,14 +6,14 @@ include("../header.php");
 $answer = strtolower($_POST["answer"]);
 // Retrieve shopper record based on e-mail address
 include_once("../Database/mysql_conn.php");
-$qry = "SELECT * FROM Shopper WHERE LOWER(PwdAnswer) LIKE ?";
+$qry = "SELECT * FROM Shopper WHERE LOWER(PwdAnswer) LIKE ?";//password answer is lowercase with database for easier matching
 $stmt = $conn->prepare($qry);
 $stmt->bind_param("s", $answer); 	// "s" - string 
 $stmt->execute();
 $result = $stmt->get_result();
 $stmt->close();
-if ($result->num_rows > 0) {
-    // To Do 1: Update the default new password to shopper"s account
+if ($result->num_rows > 0) {//if the answer is valid
+    //Update the default new password to shopper's account
     $row = $result->fetch_array();
     $shopperId = $row["ShopperID"];
     $new_pwd = "password";
