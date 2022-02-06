@@ -40,8 +40,8 @@ include("indexHeader.php");
             <div class= "col-sm-9 offset-sm-3" >
                 <button class="btn btn-primary" style="background-color: #f89ec9; border-color: #f89ec9" type='submit' >Login</button>
                 <p></p>
-                <p>Please sign up if you do not have an account.</p>
-                <p><a href="Membership_Registration/forgetPassword.php">Forget Password</a></p>
+                <p><i>Please sign up if you do not have an account.</i></p>
+                <p><a href="Membership_Registration/forgetPassword.php" style='color: #d589ac'>Forget Password</a></p>
             </div> 
         </div>
     </form>

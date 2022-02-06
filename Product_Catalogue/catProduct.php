@@ -60,14 +60,13 @@ while ($row = $result->fetch_array()){
         echo "<p><a href=$product style='color: #d589ac'><h5>$row[ProductTitle]</h5></a></p>";
         echo "<span style='font-weight: bold;color:grey;'><s>
         S$ $formattedPrice</s></span>";
-        echo "<p><span style='font-weight: bold;color:red;'>
-        S$ $OfferedPrice</span></p>";
+        echo "<p><h6><span style='font-weight: bold;color:red;'>NOW S$ $OfferedPrice !</span></h6></p>";
         echo "</div>";
       }
       else{
         echo "<div class='col-8'>";
         echo "<p><a href=$product style='color: #d589ac'><h5>$row[ProductTitle]</h5></a></p>";
-        echo "<span style='font-weight: bold;color:red;'>
+        echo "<span style='font-weight: bold;color:grey;'>
         S$ $formattedPrice</span>";
         echo "</div>";
       }

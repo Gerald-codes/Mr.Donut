@@ -36,12 +36,13 @@ include_once("../Database/mysql_conn.php");
 if (isset($_GET["keywords"]) && trim($_GET['keywords']) != "") {
     
     $keywords = $_GET['keywords'];
-    $qry = "SELECT * FROM product p INNER JOIN productspec ps ON p.ProductID=ps.ProductID
+    $qry = "SELECT * FROM product p left JOIN productspec ps ON p.ProductID=ps.ProductID
             WHERE p.ProductTitle LIKE '%$keywords%'
             OR p.ProductDesc LIKE '%$keywords%'
             OR ps.SpecVal LIKE '%$keywords%'
             OR p.Price <= '$keywords'
-            OR p.OfferedPrice <= '$keywords'" ;
+            OR p.OfferedPrice <= '$keywords'
+            GROUP BY p.ProductID" ;
     $result = $conn->query($qry); 
     
     echo "Search results for: $keywords";
@@ -57,7 +58,7 @@ if (isset($_GET["keywords"]) && trim($_GET['keywords']) != "") {
         }
     }
     else {
-        echo "No record found!";
+        echo "<span style='color: #d589ac'><i>Sorry, nothing was found! Please try again.</i></span>";
     }
 }
 
