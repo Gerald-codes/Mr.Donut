@@ -16,7 +16,7 @@ echo "<div id='checkoutPage' style='margin:auto'>"; // Start a container
 if (isset($_SESSION["Cart"])) {
 
     echo "<p class='page-title' style='text-align:center;margin-bottom: 5px;'>Checkout</p>"; 
-    echo "<div id='checkoutPage' style='margin-bottom: 10px; background-color: white ;box-shadow: 0 10px 10px 0 rgb(0 0 0 / 9%);'>"; // Start a container
+    echo "<div id='checkoutPage' style='margin-bottom: 10px; background-color: white ;box-shadow: 0 5px 5px 0 rgb(0 0 0 / 9%);'>"; // Start a container
     echo "<div class='table-responsive' >"; // Bootstrap responsive table
     echo "<table class='table table-hover'>"; // Start of table
     echo "<thead class='cart-header'>";
@@ -54,30 +54,29 @@ if (isset($_SESSION["Cart"])) {
     echo "</table>"; // End of table
     echo ("</div>");
     echo ("</div>");
-    echo "<div id='checkoutPage' style='margin-bottom: 10px; background-color: white ;box-shadow: 0 10px 10px 0 rgb(0 0 0 / 9%);'>"; // Start a container
+    echo "<div id='checkoutPage' style='margin-bottom: 10px; background-color: white ;box-shadow: 0 5px 5px 0 rgb(0 0 0 / 9%);'>"; // Start a container
     echo('<form method="post" action="./checkoutProcess.php" class="form-container">');
-    echo("<div style='display: flex; justify-content: space-around; height: 100px;'>");
-    echo("<div style=' display:flex; justify-content:center; align-items:center; height: 100%;'>");
-        echo("<h5 style='padding-right: 4px;'>Message</h5>");
-            echo("<div style='style='padding: 4px; margin-left:10px;
-        border-radius: 4px; height: 60%;'>");
-            echo('<input type="text" style="width:250px; height:30px" placeholder="(Optional) Leave a message" name="message" value="">');
+    echo("<div style='display: flex; justify-content: space-around; height: 150px;'>");
+    echo("<div style=' display:flex; justify-content:center; align-items:center; height: 100%; width: 40%; '>");
+        echo("<h5 style='margin-right: 5px;'>Message:</h5>");
+            echo("<div style='padding: 4px; margin-left:10px;  width: 60%;'>");
+            echo('<input type="text" style="width: 100%;
+            height: calc(1.5em + 0.75rem + 2px);overflow:hidden; " placeholder="(Optional) Leave a message" name="message" value="">');
             echo ("</div>");
         echo ("</div>");
     echo("<div style='width:50%;display:flex;
 	border-radius: 4px; height: 100%; justify-content: flex-start; align-items: center;'>");
-        echo("<h5 style='margin-left:30%; padding: 4px;'>Delivery Option:</h5>");
+        echo("<h5>Delivery Mode:</h5>");
         echo("<div style='display:flex; margin-left:10px;  flex-direction:row'>");
             echo("<div >");
-            echo('<input type="radio" id="Normal" name="ShipCharge" value="2">');
-        //     echo('<span class="hovertext" data-hover="Delivered within 1 working day after an order is placed">
-        //     Normal Delivery ($2)
-        // </span>');
-    echo('<label for="normal">Normal Delivery ($2)</label>');
-    // echo("<span>Delivered within 1 working day after an order is placed</span>");
+            echo('<input type="radio" id="Normal" name="ShipCharge" value="2" checked>');
+    echo('<label for="normal" style="font-size:16px; margin-left: 5px;">Normal Delivery ($2)</label>');
+    echo("<p style='width: 350px;font-style: italic;color: grey'>Delivered within 1 working day</p>");
             echo("<div >");
                 echo('<input type="radio" id="express" name="ShipCharge" value="5">');
-                echo('<label for="express">Express Delivery ($5)</label>');
+                echo('<label for="express" style="font-size:16px; margin-left: 5px;">Express Delivery ($5)</label>');
+            echo("<p style='width: 350px;font-style: italic; color: grey'>Delivered within 2 hours</p>");
+
             echo("</div>");
         echo ("</div>");
         echo ("</div>");

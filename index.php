@@ -26,12 +26,13 @@ $stmt->close();
 echo "<div id='offered-img' class='row' style='border-color: #f89ec9'>";
 // Display each product in a row 
 while ($row = $result->fetch_array()){
-     $product = "/MrDonut/Mr.Donut/Product_Catalogue/productDetails.php?pid=$row[ProductID]";
+     $product = "./Product_Catalogue/productDetails.php?pid=$row[ProductID]";
      echo " <div style='margin:auto'>";
      $img = "./Images/Products/$row[ProductImage]";
      echo "<img src='$img' class='offered-img'/>";
      echo "<h4><a href=$product style='color: #d589ac'>$row[ProductTitle]</a></h4>";
-     echo "<div style='text-align:center'><span>On sale at $row[OfferedPrice] !</span><div>";
+     $formattedPrice = number_format($row['OfferedPrice'],2);
+     echo "<div style='text-align:center'><span>On sale at $$formattedPrice !</span><div>";
      echo "</div>";
 }
 // To Do:  Ending ....

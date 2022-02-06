@@ -4,7 +4,7 @@ include("../header.php"); // Include the Page Layout header
 include_once("./myPayPal.php"); // Include the file that contains PayPal settings
 include_once("../Database/mysql_conn.php"); 
 
-if($_POST) //Post Data received from Shopping cart page.
+if($_POST) //Post Data received from Checkout page.
 {
 	// Checkout Package - Basic Requirement 1
 	if (isset($_POST['ShipCharge'])) {
