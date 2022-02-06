@@ -15,7 +15,8 @@ echo "<div id='myShopCart' style='margin:auto'>"; // Start a container
 if (isset($_SESSION["Cart"])) {
 	include_once("../Database/mysql_conn.php");
 
-	$qry = "SELECT s.*, (p.OfferedPrice*s.Quantity) AS discountTotal, p.OfferedPrice, (s.Price*s.Quantity) AS Total
+	$qry = "SELECT p.ProductID, p.Price, p.Offered, p.OfferStartDate, p.OfferEndDate, s.Quantity, s.Name,
+			(p.OfferedPrice*s.Quantity) AS discountTotal, p.OfferedPrice, (s.Price*s.Quantity) AS Total, s.Quantity AS subQuantity
 			FROM ShopCartItem AS s
 			JOIN Product AS p
 			ON s.ProductID = p.ProductID
@@ -44,19 +45,19 @@ if (isset($_SESSION["Cart"])) {
 
 		$_SESSION["Items"] = array();	
 
-		
-
+		$totalDiscount = 0;
 		$subTotal = 0; // Declare a variable to compute subtotal before tax
 		echo "<tbody>"; // Start of table's body section
 		while ($row = $result->fetch_array()) {
+			$formattedDiscount = 0;
 			echo "<tr>";
 			echo "<td style='width:50%'>$row[Name]<br />"; 
 			echo "Product ID: $row[ProductID]</td>";
-			if ($row['OfferedPrice'] == 0) { // Check if discounted price exists
-				$formattedPrice = number_format($row["Price"],2); // Does not exist, echo original price
+			if ($row['Offered'] == 1 && $row['OfferEndDate'] >= date("Y-m-d") && $row['OfferStartDate'] <= date("Y-m-d")){
+				$formattedPrice = number_format($row["OfferedPrice"],2); //If theres is offered price within the dates, echo discounted price
 			}
 			else {
-				$formattedPrice = number_format($row["OfferedPrice"],2); // Does exist, echo discounted price
+				$formattedPrice = number_format($row["Price"],2); // if no offered, echo original price
 			}
 			echo "<td>$formattedPrice</td>";
 			echo "<td>";
@@ -75,7 +76,14 @@ if (isset($_SESSION["Cart"])) {
 			echo "<input type='hidden' name='product_id' value='$row[ProductID]' />";
 			echo "</form>";
 			echo "</td>";
-			$formattedTotal = number_format($row["Total"],2);
+			if($row['Offered'] == 1 && $row['OfferEndDate']>=date("Y-m-d") && $row['OfferStartDate']<=date("Y-m-d")){
+				$formattedTotal = number_format($row["OfferedPrice"],2)*$row["Quantity"] ;
+				$formattedTotal = number_format($formattedTotal,2);
+				$formattedDiscount = number_format($row["Total"],2) - $formattedTotal;
+			  }
+			  else{
+				$formattedTotal = number_format($row["Total"],2);
+			  }
 			echo "<td>$formattedTotal</td>";
 			echo "<td>";
 			echo "<form action='cartFunctions.php' method='post'>";
@@ -89,12 +97,15 @@ if (isset($_SESSION["Cart"])) {
 			$_SESSION["Items"][] = array("productId"=>$row["ProductID"],
 										 "name"=>$row["Name"],
 										 "price"=>$row["Price"],
+										 "unitprice"=>$formattedPrice,
 										 "quantity"=>$row["Quantity"],
-										 "totalcost"=>$formattedTotal);	
+										 "totalcost"=>$formattedTotal,
+										 "totaldiscount"=>$formattedDiscount);		
 
 			// Accumulate the running sub-total
 			$subTotal += $row["Total"];
-		}
+			$totalDiscount += $formattedDiscount;
+		}	
 		echo "</tbody>"; // End of table's body section
 		echo "</table>"; // End of table
 		echo "</div>"; // End of Bootstrap responsive table
@@ -109,7 +120,9 @@ if (isset($_SESSION["Cart"])) {
 		echo "<p style='text-align:center; font-size:20px'>
 		Subtotal: S$". number_format($subTotal, 2), 
 		"</br>Total quantity of items: $totalQuantity"; // Additional 2. Compute number of items in cart
-  		$_SESSION["SubTotal"] = round($subTotal, 2);	
+		$_SESSION["TotalQuantities"] = $totalQuantity;	
+  		$_SESSION["SubTotal"] = round($subTotal, 2);
+  		$_SESSION["TotalDiscount"] = $totalDiscount;	
 		
 		// Printing out notice for waived delivery charge
 		if ($subTotal > 50) {
@@ -139,6 +152,8 @@ if (isset($_SESSION["Cart"])) {
                 $stmt2->close();
 			}
 		}
+		echo "</br>";
+		echo('<center><a href="../Checkout/checkoutPage.php"> <input type="button" class="check" value="Check out now!" /> </a></center>');
 	}
 	else {
 		echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";
@@ -149,8 +164,7 @@ else {
 	echo "<h3 style='text-align:center; color:red;'>Empty shopping cart!</h3>";
 }
 
-echo "</br>";
-echo('<center><a href="../Checkout/checkoutPage.php"> <input type="button" class="check" value="Check out now!" /> </a></center>');
+
 
 echo "</div>"; // End of container
 include("../footer.php"); // Include the Page Layout footer

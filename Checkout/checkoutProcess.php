@@ -10,12 +10,18 @@ if($_POST) //Post Data received from Shopping cart page.
 	if (isset($_POST['ShipCharge'])) {
 		$_SESSION["ShipCharge"] =  $_POST['ShipCharge'];
 		if ($_POST['ShipCharge'] == "2"){
+			if ($_SESSION['SubTotal'] > 50) {
+				$_SESSION["ShipCharge"] = 0;
+			}
 			$_SESSION["DeliveryMode"] = "Normal";
 			$_SESSION["DeliveryDate"] = date("Y-m-d", time() + 7200);
 		}else{
 			$_SESSION["DeliveryMode"] = "Express";
 			$_SESSION["DeliveryDate"] = date("Y-m-d", time() + 86400);
 		}
+	}
+	if ($_POST['message'] != null) {
+		$_SESSION["Message"] =  $_POST['message'];
 	}
 	// Checkout Package - Additional Requirement 1
 	//  Check to ensure each product item saved in the associative array is not out of stock
@@ -40,7 +46,6 @@ if($_POST) //Post Data received from Shopping cart page.
 		exit;
 	}
 }
-	
 	$paypal_data = '';
 	// Get all items from the shopping cart, concatenate to the variable $paypal_data
 	// $_SESSION['Items'] is an associative array
@@ -48,7 +53,7 @@ if($_POST) //Post Data received from Shopping cart page.
 		$paypal_data .= '&L_PAYMENTREQUEST_0_QTY'.$key.'='.urlencode($item["quantity"]);
 	  	$paypal_data .= '&L_PAYMENTREQUEST_0_AMT'.$key.'='.urlencode($item["price"]);
 	  	$paypal_data .= '&L_PAYMENTREQUEST_0_NAME'.$key.'='.urlencode($item["name"]);
-		$paypal_data .= '&L_PAYMENTREQUEST_0_NUMBER'.$key.'='.urlencode($item["productId"]);
+		// $paypal_data .= '&L_PAYMENTREQUEST_0_NUMBER'.$key.'='.urlencode($item["productId"]);
 	}
 	
 	// Checkout Package - Additional Requirement 2
@@ -168,12 +173,12 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 		// Update shopcart table, close the shopping cart (OrderPlaced=1)
 		$total = $_SESSION["SubTotal"] + $_SESSION["Tax"] + $_SESSION["ShipCharge"];
 		$qry = "UPDATE ShopCart SET OrderPlaced=1, Quantity=?,
-				SubTotal=?, ShipCharge=?, Tax=?, Total=?
+				SubTotal=?, ShipCharge=?, Tax=?, Total=?, Discount=?
 				WHERE ShopCartID=?";
 		$stmt = $conn->prepare($qry);
-		$stmt->bind_param("iddddi", $_SESSION["NumCartItem"],
+		$stmt->bind_param("idddddi", $_SESSION["NumCartItem"],
 						$_SESSION["SubTotal"], $_SESSION["ShipCharge"],
-						$_SESSION["Tax"], $total,
+						$_SESSION["Tax"], $total, $_SESSION['TotalDiscount'],
 						$_SESSION["Cart"]);
 		$stmt->execute();
 		$stmt->close();
@@ -214,11 +219,11 @@ if(isset($_GET["token"]) && isset($_GET["PayerID"]))
 			// Insert an Order record with shipping information
 			// Get the Order ID and save it in session variable.
 			$qry = "INSERT INTO OrderData (DeliveryDate, DeliveryMode, ShipName, ShipAddress, ShipCountry,
-											ShipEmail, ShopCartID)
-					VALUE (?,?,?,?,?,?,?)";
+											ShipEmail, ShopCartID, Message)
+					VALUE (?,?,?,?,?,?,?,?)";
 			$stmt = $conn->prepare($qry);
-			$stmt->bind_param("ssssssi",$_SESSION["DeliveryDate"], $_SESSION["DeliveryMode"], $ShipName, $ShipAddress,
-							 $ShipCountry, $ShipEmail,$_SESSION["Cart"]);	
+			$stmt->bind_param("ssssssis",$_SESSION["DeliveryDate"], $_SESSION["DeliveryMode"], $ShipName, $ShipAddress,
+							 $ShipCountry, $ShipEmail,$_SESSION["Cart"],$_SESSION["Message"]);	
 			$stmt->execute();
 			$stmt->close();		
 			$qry = "SELECT LAST_INSERT_ID() AS OrderID";
